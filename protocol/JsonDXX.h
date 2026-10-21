@@ -28,6 +28,8 @@ public:
     bool isObject() const;
     bool isArray() const;
     bool isString() const;
+    bool isInteger() const;
+    std::string canonicalDump() const;
     bool isNull() const;
     bool has(const std::string& key) const;
     std::string text() const;

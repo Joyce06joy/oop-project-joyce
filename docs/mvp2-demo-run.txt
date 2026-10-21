@@ -1,0 +1,11 @@
+Alice {'QQ': '10001', 'WECHAT': 'WX8001', 'WEIBO': '10001'}
+Bob {'QQ': '10002', 'WECHAT': 'WX8002', 'WEIBO': '10002'}
+Carol {'WECHAT': 'WX8003'}
+David {'QQ': '10003', 'WECHAT': 'WX8004', 'WEIBO': '10003'}
+Emily {'QQ': '10004'}
+Demo-only password: Mvp2-Pass-2026!
+QQ: Alice—Bob, Alice—David, Bob—David, Bob—Emily
+QQ/WeChat binding: Alice and Bob only; David deliberately unbound.
+Pending WEIBO Bob→Alice: ae0c4fd9f044e1c82a3fc47f9b895bbe
+Alice: QQ mutual(Bob)=David; same-service suggestion=Emily; QQ→WECHAT suggestion=Bob.
+Database: /Users/joyce/oop-project-Joyce/data/mvp2-demo.sqlite3

@@ -8,7 +8,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 LoginWindowDXX::LoginWindowDXX(quint16 port,QWidget* parent):QMainWindow(parent),client_(port,this) {
-    setObjectName("loginWindow"); setWindowTitle(QStringLiteral("IMPlatform · MVP 1")); resize(520,430);
+    setObjectName("loginWindow"); setWindowTitle(QStringLiteral("IMPlatform · MVP 2")); resize(900,860);
     auto* center=new QWidget; setCentralWidget(center); auto* root=new QVBoxLayout(center); root->setContentsMargins(28,24,28,24); root->setSpacing(14);
     auto* title=new QLabel(QStringLiteral("IMPlatform")); title->setStyleSheet("font-size: 28px; font-weight: 600;"); root->addWidget(title);
     status_=new QLabel(QStringLiteral("连接中…")); status_->setObjectName("connectionStatus"); status_->setWordWrap(true); root->addWidget(status_);

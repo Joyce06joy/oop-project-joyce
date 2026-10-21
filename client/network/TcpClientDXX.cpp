@@ -9,6 +9,14 @@ TcpClientDXX::TcpClientDXX(quint16 port,QObject* parent):QObject(parent),port_(p
         const auto bytes=socket_.readAll();
         try {
             for(const auto& r:decoder_.feed(bytes.data(),static_cast<std::size_t>(bytes.size()))) {
+                if(r["kind"].text()=="event") {
+                    if(!r["event_id"].isString()||r["event_id"].text().empty()||!r["type"].isString()||!r["data"].isObject()) throw std::runtime_error("invalid event");
+                    const auto eventId=QString::fromStdString(r["event_id"].text());
+                    if(eventIds_.contains(eventId)) continue;
+                    eventIds_.insert(eventId); eventOrder_.enqueue(eventId);
+                    while(eventOrder_.size()>1024) eventIds_.remove(eventOrder_.dequeue());
+                    emit eventReceived(r); continue;
+                }
                 const auto id=QString::fromStdString(r["request_id"].text());
                 if(r["kind"].text()!="response"||!r["type"].isString()||!r["request_id"].isString()) throw std::runtime_error("invalid response");
                 if(!pending_.contains(id)) continue; // Expired responses cannot drive UI state.

@@ -12,7 +12,7 @@ from acceptance import start, stop, connect, call, reg
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--server', default=str(ROOT / 'build/mvp1/IMServer'))
+    ap.add_argument('--server', default=str(ROOT / 'build/mvp2/IMServer'))
     ap.add_argument('--reset', action='store_true', help='explicitly replace only data/mvp1-demo.sqlite3')
     args = ap.parse_args()
     folder = ROOT / 'data'; folder.mkdir(exist_ok=True)

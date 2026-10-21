@@ -79,6 +79,8 @@ find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/schema.sql" MVP1_SCHEMA)
 configure_file(database/SchemaDXX.h.in generated/SchemaDXX.h @ONLY)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/migrations/002_friends.sql" MVP2_MIGRATION)
+configure_file(database/MigrationDXX.h.in generated/MigrationDXX.h @ONLY)
 add_library(IMProtocol STATIC protocol/JsonDXX.cpp protocol/ProtocolDXX.cpp)
 set_target_properties(IMProtocol PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_include_directories(IMProtocol PUBLIC protocol)
@@ -86,6 +88,9 @@ target_link_libraries(IMProtocol PUBLIC json-c::json-c)
 add_library(IMServerCore STATIC
     server/persistence/DatabaseDXX.cpp server/persistence/StatementDXX.cpp
     server/application/PasswordDXX.cpp server/application/AuthServiceDXX.cpp
+    server/application/BusinessErrorDXX.cpp server/application/SocialRepositoryDXX.cpp
+    server/application/AccountServiceDXX.cpp server/persistence/MutationRepositoryDXX.cpp
+    server/application/FriendServiceDXX.cpp server/application/RecommendationServiceDXX.cpp
     server/application/RequestDispatcherDXX.cpp server/network/TcpServerDXX.cpp)
 set_target_properties(IMServerCore PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_include_directories(IMServerCore PUBLIC server/persistence server/application server/network
@@ -96,7 +101,10 @@ set_target_properties(IMServer PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_link_libraries(IMServer PRIVATE IMServerCore)
 add_library(IMClientUi STATIC
     client/network/TcpClientDXX.cpp client/ui/LoginWindowDXX.cpp
-    client/ui/RegisterWindowDXX.cpp client/ui/ServiceSelectWindowDXX.cpp)
+    client/ui/RegisterWindowDXX.cpp client/ui/ServiceSelectWindowDXX.cpp
+    client/ui/RequestPanelDXX.cpp client/ui/FriendPageDXX.cpp
+    client/ui/FriendRequestPageDXX.cpp client/ui/RecommendationPageDXX.cpp
+    client/ui/AccountPageDXX.cpp client/ui/WorkspaceDXX.cpp)
 target_include_directories(IMClientUi PUBLIC client/network client/ui)
 target_link_libraries(IMClientUi PUBLIC IMProtocol Qt6::Widgets Qt6::Network)
 qt_add_executable(IMClient client/main.cpp)
@@ -120,4 +128,16 @@ if(BUILD_TESTING)
     target_link_libraries(ClientUiTestsDXX PRIVATE IMClientUi Qt6::Test)
     add_test(NAME client_ui COMMAND ClientUiTestsDXX $<TARGET_FILE:IMServer> $<TARGET_FILE:IMClient>)
     set_tests_properties(client_ui PROPERTIES TIMEOUT 90 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+endif()
+
+if(BUILD_TESTING)
+    add_test(NAME mvp2_acceptance COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/mvp2_acceptance.py" --server $<TARGET_FILE:IMServer>)
+    set_tests_properties(mvp2_acceptance PROPERTIES TIMEOUT 240)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(Mvp2UiTestsDXX tests/mvp2_ui_main.cpp)
+    target_link_libraries(Mvp2UiTestsDXX PRIVATE IMClientUi Qt6::Test)
+    add_test(NAME mvp2_ui COMMAND Mvp2UiTestsDXX $<TARGET_FILE:IMServer>)
+    set_tests_properties(mvp2_ui PROPERTIES TIMEOUT 180 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

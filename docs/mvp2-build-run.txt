@@ -1,0 +1,55 @@
+[1/2] Cleaning additional files...
+[2/2] Cleaning all built files...
+Cleaning... 46 files.
+[1/52] Building CXX object CMakeFiles/IMServerCore.dir/server/persistence/StatementDXX.cpp.o
+[2/52] Building CXX object CMakeFiles/IMProtocol.dir/protocol/ProtocolDXX.cpp.o
+[3/52] Building CXX object CMakeFiles/IMProtocol.dir/protocol/JsonDXX.cpp.o
+[4/52] Building CXX object CMakeFiles/IMServerCore.dir/server/persistence/DatabaseDXX.cpp.o
+[5/52] Linking CXX static library libIMProtocol.a
+[6/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/BusinessErrorDXX.cpp.o
+[7/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/PasswordDXX.cpp.o
+[8/52] Automatic MOC and UIC for target IMClientUi
+[9/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/AccountServiceDXX.cpp.o
+[10/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/AuthServiceDXX.cpp.o
+[11/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/SocialRepositoryDXX.cpp.o
+[12/52] Building CXX object CMakeFiles/IMClientUi.dir/IMClientUi_autogen/mocs_compilation.cpp.o
+[13/52] Building CXX object CMakeFiles/IMClientUi.dir/client/network/TcpClientDXX.cpp.o
+[14/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/LoginWindowDXX.cpp.o
+[15/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/RegisterWindowDXX.cpp.o
+[16/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/ServiceSelectWindowDXX.cpp.o
+[17/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/RequestPanelDXX.cpp.o
+[18/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/FriendPageDXX.cpp.o
+[19/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/FriendRequestPageDXX.cpp.o
+[20/52] Building CXX object CMakeFiles/IMServerCore.dir/server/persistence/MutationRepositoryDXX.cpp.o
+[21/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/RecommendationPageDXX.cpp.o
+[22/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/FriendServiceDXX.cpp.o
+[23/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/AccountPageDXX.cpp.o
+[24/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/RecommendationServiceDXX.cpp.o
+[25/52] Automatic MOC and UIC for target oop-project-Joyce
+[26/52] Automatic MOC and UIC for target ProtocolTestsDXX
+[27/52] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/WorkspaceDXX.cpp.o
+[28/52] Linking CXX static library libIMClientUi.a
+[29/52] Automatic MOC and UIC for target IMClient
+[30/52] Automatic MOC and UIC for target ClientUiTestsDXX
+[31/52] Building CXX object CMakeFiles/IMServerCore.dir/server/network/TcpServerDXX.cpp.o
+[32/52] Automatic MOC and UIC for target Mvp2UiTestsDXX
+[33/52] Building CXX object CMakeFiles/IMServerCore.dir/server/application/RequestDispatcherDXX.cpp.o
+[34/52] Building CXX object CMakeFiles/IMServer.dir/server/main.cpp.o
+[35/52] Linking CXX static library libIMServerCore.a
+[36/52] Building CXX object CMakeFiles/IMClient.dir/IMClient_autogen/mocs_compilation.cpp.o
+[37/52] Building CXX object CMakeFiles/oop-project-Joyce.dir/oop-project-Joyce_autogen/mocs_compilation.cpp.o
+[38/52] Building CXX object CMakeFiles/ProtocolTestsDXX.dir/ProtocolTestsDXX_autogen/mocs_compilation.cpp.o
+[39/52] Building CXX object CMakeFiles/oop-project-Joyce.dir/main.cpp.o
+[40/52] Building CXX object CMakeFiles/ClientUiTestsDXX.dir/ClientUiTestsDXX_autogen/mocs_compilation.cpp.o
+[41/52] Building CXX object CMakeFiles/oop-project-Joyce.dir/mainwindowdxx.cpp.o
+[42/52] Building CXX object CMakeFiles/Mvp2UiTestsDXX.dir/Mvp2UiTestsDXX_autogen/mocs_compilation.cpp.o
+[43/52] Building CXX object CMakeFiles/IMClient.dir/client/main.cpp.o
+[44/52] Building CXX object CMakeFiles/ProtocolTestsDXX.dir/tests/protocol_main.cpp.o
+[45/52] Linking CXX executable IMServer
+[46/52] Linking CXX executable oop-project-Joyce.app/Contents/MacOS/oop-project-Joyce
+[47/52] Linking CXX executable ProtocolTestsDXX
+[48/52] Linking CXX executable IMClient.app/Contents/MacOS/IMClient
+[49/52] Building CXX object CMakeFiles/ClientUiTestsDXX.dir/tests/client_ui_main.cpp.o
+[50/52] Linking CXX executable ClientUiTestsDXX
+[51/52] Building CXX object CMakeFiles/Mvp2UiTestsDXX.dir/tests/mvp2_ui_main.cpp.o
+[52/52] Linking CXX executable Mvp2UiTestsDXX

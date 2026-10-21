@@ -2,6 +2,7 @@
 #include "TcpClientDXX.h"
 #include <QWidget>
 class QLabel;
+class WorkspaceDXX;
 class QVBoxLayout;
 class ServiceSelectWindowDXX : public QWidget {
     Q_OBJECT
@@ -19,4 +20,5 @@ private:
     QString pendingId_;
     QString selected_;
     JsonDXX account_;
+    WorkspaceDXX* workspace_;
 };

@@ -1,0 +1,216 @@
+[OUTPUT]
+Internal ctest changing into directory: /Users/joyce/oop-project-Joyce/build/mvp2
+
+[HANDLER_VERBOSE_OUTPUT]
+UpdateCTestConfiguration  from :/Users/joyce/oop-project-Joyce/build/mvp2/DartConfiguration.tcl
+
+Parse Config file:/Users/joyce/oop-project-Joyce/build/mvp2/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/Users/joyce/oop-project-Joyce/build/mvp2/DartConfiguration.tcl
+Parse Config file:/Users/joyce/oop-project-Joyce/build/mvp2/DartConfiguration.tcl
+[HANDLER_OUTPUT]
+Test project /Users/joyce/oop-project-Joyce/build/mvp2
+
+[HANDLER_VERBOSE_OUTPUT]
+Constructing a list of tests
+
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+[HANDLER_OUTPUT]
+    Start 1: protocol
+
+[HANDLER_VERBOSE_OUTPUT]
+
+1: Test command: /Users/joyce/oop-project-Joyce/build/mvp2/ProtocolTestsDXX
+
+1: Working Directory: /Users/joyce/oop-project-Joyce/build/mvp2
+1: Test timeout computed to be: 1500
+1: Protocol: fragmented/coalesced frames, invalid length/UTF8/JSON, envelopes PASS
+[HANDLER_OUTPUT]
+1/5 Test #1: protocol .........................
+   Passed    0.61 sec
+[HANDLER_VERBOSE_OUTPUT]
+test 2
+
+[HANDLER_OUTPUT]
+    Start 2: acceptance
+
+[HANDLER_VERBOSE_OUTPUT]
+
+2: Test command: /opt/anaconda3/bin/python3.13 "/Users/joyce/oop-project-Joyce/tests/acceptance.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp2/IMServer"
+
+2: Working Directory: /Users/joyce/oop-project-Joyce/build/mvp2
+2: Test timeout computed to be: 90
+2: T01 T02 T03 PASS: saved registrations and ID spaces
+2: T04 PASS; T05 service PASS; three simultaneous TCP sessions PASS
+2: T09 PASS: normalized replay, conflict, duplicate login
+2: T11 PASS: split/coalesced/invalid length/UTF8/JSON
+2: T07 T12 PASS: injected SQL failure rolls back user/accounts/counter/request; constraints
+2: Concurrent registration/replay, connection-bound sessions, exclusive DB ownership PASS
+2: T06 T14 PASS: restart preserves users and idempotency
+2: T13 PASS: server logs contain no test passwords/auth bodies
+2: ALL SERVICE/PROTOCOL ACCEPTANCE CHECKS PASSED
+[HANDLER_OUTPUT]
+2/5 Test #2: acceptance .......................
+   Passed    2.11 sec
+[HANDLER_VERBOSE_OUTPUT]
+test 3
+
+[HANDLER_OUTPUT]
+    Start 3: client_ui
+
+[HANDLER_VERBOSE_OUTPUT]
+
+3: Test command: /Users/joyce/oop-project-Joyce/build/mvp2/ClientUiTestsDXX "/Users/joyce/oop-project-Joyce/build/mvp2/IMServer" "/Users/joyce/oop-project-Joyce/build/mvp2/IMClient.app/Contents/MacOS/IMClient"
+
+3: Working Directory: /Users/joyce/oop-project-Joyce/build/mvp2
+3: Environment variables:
+3:  QT_QPA_PLATFORM=offscreen
+3: Test timeout computed to be: 90
+3: qt.qpa.fonts: Populating font family aliases took 49 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost.
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support raise()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support raise()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support raise()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support raise()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: This plugin does not support propagateSizeHints()
+3: T10 PASS: offline Qt window shows error
+3: T01–T05 Qt form checks PASS; 3 simultaneous Qt windows PASS; event-loop heartbeat PASS
+3: T08 process check PASS: three independent IMClient processes running (login exercised by Qt harness windows)
+3: Disconnect/retry/uncertain registration timeout and identical replay PASS
+3: ALL QT UI CHECKS PASSED
+[HANDLER_OUTPUT]
+3/5 Test #3: client_ui ........................
+   Passed   18.03 sec
+[HANDLER_VERBOSE_OUTPUT]
+test 4
+
+[HANDLER_OUTPUT]
+    Start 4: mvp2_acceptance
+
+[HANDLER_VERBOSE_OUTPUT]
+
+4: Test command: /opt/anaconda3/bin/python3.13 "/Users/joyce/oop-project-Joyce/tests/mvp2_acceptance.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp2/IMServer"
+
+4: Working Directory: /Users/joyce/oop-project-Joyce/build/mvp2
+4: Test timeout computed to be: 240
+4: M2-T01 PASS
+4: M2-T02 PASS
+4: M2-T03 PASS
+4: M2-T04 PASS
+4: M2-T05 PASS
+4: M2-T06 PASS
+4: M2-T07 PASS
+4: M2-T08 PASS
+4: M2-T09 PASS
+4: M2-T10 PASS
+4: M2-T11 PASS
+4: M2-T12 PASS
+4: M2-T13 PASS
+4: M2-T14 PASS
+4: M2-T15 PASS
+4: M2-T16 PASS
+4: M2-T17 PASS
+4: M2-T18 PARTIAL: IMServer built externally and startup exercised; Qt Creator and three-client GUI require separate evidence.
+4: M2-T14 scope: server SQL rollback and disconnect only; GUI responsiveness requires separate evidence.
+4: 17 passed; 0 failed; 0 not selected
+[HANDLER_OUTPUT]
+4/5 Test #4: mvp2_acceptance ..................
+   Passed   16.86 sec
+[HANDLER_VERBOSE_OUTPUT]
+test 5
+
+[HANDLER_OUTPUT]
+    Start 5: mvp2_ui
+
+[HANDLER_VERBOSE_OUTPUT]
+
+5: Test command: /Users/joyce/oop-project-Joyce/build/mvp2/Mvp2UiTestsDXX "/Users/joyce/oop-project-Joyce/build/mvp2/IMServer"
+
+5: Working Directory: /Users/joyce/oop-project-Joyce/build/mvp2
+5: Environment variables:
+5:  QT_QPA_PLATFORM=offscreen
+5: Test timeout computed to be: 180
+5: qt.qpa.fonts: Populating font family aliases took 47 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost.
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: This plugin does not support propagateSizeHints()
+5: PASS real-socket Qt: explicit activation, search/pagination, send/accept/reject, pushes, remark, delete confirmation, binding/unbinding/open, recommendations/mutual/common
+5: PASS genuine 15-second timeout and disconnect identical replay; push dedup; UI heartbeat
+[HANDLER_OUTPUT]
+5/5 Test #5: mvp2_ui ..........................
+   Passed   20.45 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =  58.06 sec

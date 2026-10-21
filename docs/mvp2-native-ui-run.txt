@@ -1,0 +1,2 @@
+PASS real-socket Qt: explicit activation, search/pagination, send/accept/reject, pushes, remark, delete confirmation, binding/unbinding/open, recommendations/mutual/common
+PASS genuine 15-second timeout and disconnect identical replay; push dedup; UI heartbeat

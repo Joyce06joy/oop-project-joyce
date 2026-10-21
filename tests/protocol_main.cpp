@@ -5,6 +5,10 @@ namespace { void check(bool ok) { if(!ok) throw std::runtime_error("protocol ass
 int main() {
     try {
         JsonDXX request{{"kind","request"},{"type","system.ping"},{"request_id","0123456789abcdef"},{"data",JsonDXX{{"中文","测试"}}}};
+        const auto ordered=JsonDXX::parse(R"({"service_type":"QQ","target_display_id":"10002","remark":"同学"})");
+        const auto reordered=JsonDXX::parse(R"({"remark":"同学","target_display_id":"10002","service_type":"QQ"})");
+        check(ordered.canonicalDump()==reordered.canonicalDump());
+        check(JsonDXX(20).isInteger()&&!JsonDXX(true).isInteger()&&!JsonDXX("20").isInteger());
         auto copied=request; copied.set("type","auth.logout"); check(request["type"].text()=="system.ping");
         auto child=request["data"]; child.set("中文","changed"); check(request["data"]["中文"].text()=="测试");
         const auto frame=ProtocolDXX::frame(request); ProtocolDXX decoder; int count=0;

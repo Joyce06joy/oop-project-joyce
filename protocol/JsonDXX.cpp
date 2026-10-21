@@ -5,6 +5,7 @@
 #endif
 #include <stdexcept>
 #include <utility>
+#include <algorithm>
 namespace {
 json_object* clone(json_object* value) {
     if(!value) return nullptr;
@@ -48,3 +49,16 @@ std::string JsonDXX::text() const { return isString()?std::string(json_object_ge
 std::int64_t JsonDXX::integer() const { return json_object_get_int64(value_); }
 bool JsonDXX::boolean() const { return json_object_is_type(value_,json_type_boolean)&&json_object_get_boolean(value_); }
 std::string JsonDXX::dump() const { return json_object_to_json_string_ext(value_,JSON_C_TO_STRING_PLAIN); }
+
+bool JsonDXX::isInteger() const { return json_object_is_type(value_,json_type_int); }
+std::string JsonDXX::canonicalDump() const {
+    if(isObject()) {
+        std::vector<std::string> keys;
+        json_object_object_foreach(value_,key,value) { (void)value; keys.emplace_back(key); }
+        std::sort(keys.begin(),keys.end()); std::string out="{";
+        for(const auto& key:keys) { if(out.size()>1) out+=","; out+=JsonDXX(key).dump()+":"+(*this)[key].canonicalDump(); }
+        return out+"}";
+    }
+    if(isArray()) { std::string out="["; for(const auto& value:items()) { if(out.size()>1) out+=","; out+=value.canonicalDump(); } return out+"]"; }
+    return dump();
+}

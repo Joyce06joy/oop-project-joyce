@@ -1,0 +1,2 @@
+#pragma once
+inline constexpr const char* MigrationV2DXX=R"DXXSQL(@MVP2_MIGRATION@)DXXSQL";

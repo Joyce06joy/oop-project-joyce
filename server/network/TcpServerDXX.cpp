@@ -37,7 +37,11 @@ int TcpServerDXX::run() {
                 { std::unique_lock<std::mutex> lock(mutex); ready.wait(lock,[&] {return done||!tasks.empty();}); if(tasks.empty()&&done) break; task=std::move(tasks.front()); tasks.pop_front(); }
                 if(task.second.isNull()) { dispatcher.disconnected(task.first); continue; }
                 auto result=dispatcher.dispatch(task.first,task.second);
-                { std::lock_guard<std::mutex> lock(mutex); results.emplace_back(task.first,std::move(result)); }
+                auto events=dispatcher.takeEvents();
+                { std::lock_guard<std::mutex> lock(mutex);
+                  results.emplace_back(task.first,std::move(result));
+                  for(auto& event:events) results.push_back(std::move(event));
+                }
             }
         } catch(...) { try { initialized.set_exception(std::current_exception()); } catch(...) {} }
     });
@@ -52,7 +56,7 @@ int TcpServerDXX::run() {
         { std::lock_guard<std::mutex> lock(mutex);
           while(!results.empty()) { auto result=std::move(results.front()); results.pop_front(); for(const auto& entry:ids) if(entry.second==result.first) { try { output[entry.first]+=ProtocolDXX::frame(result.second); }
                     catch(const std::exception&) { output[entry.first]+=ProtocolDXX::frame(ProtocolDXX::error(JsonDXX({}),"SERVER_ERROR","Response encoding failed")); }
-                    --pending[result.first]; break; } }
+                    if(result.second["kind"].text()=="response") --pending[result.first]; break; } }
         }
         std::vector<pollfd> polls{{listener,POLLIN,0}};
         for(const auto& entry:ids) polls.push_back({entry.first,static_cast<short>((pending[entry.second]<8?POLLIN:0)|(output[entry.first].empty()?0:POLLOUT)),0});
