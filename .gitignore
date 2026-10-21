@@ -1,0 +1,29 @@
+# Qt Creator and local editor settings
+.qtcreator/
+*.user
+*.user.*
+.vscode/
+.idea/
+
+# Build output
+build/
+build-*/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+*.app/
+*.dSYM/
+
+# Local runtime data and credentials
+.env
+.env.*
+!.env.example
+data/
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+*.log
+
+# macOS
+.DS_Store
