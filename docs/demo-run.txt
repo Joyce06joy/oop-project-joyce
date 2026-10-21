@@ -1,0 +1,5 @@
+Alice {'user_id': 1, 'registered_at': '2026-10-21T12:51:09Z', 'accounts': [{'service_type': 'QQ', 'display_id': '10001'}]}
+Bob {'user_id': 2, 'registered_at': '2026-10-21T12:51:09Z', 'accounts': [{'service_type': 'QQ', 'display_id': '10002'}, {'service_type': 'WECHAT', 'display_id': 'WX8001'}, {'service_type': 'WEIBO', 'display_id': '10002'}]}
+Carol {'user_id': 3, 'registered_at': '2026-10-21T12:51:09Z', 'accounts': [{'service_type': 'WECHAT', 'display_id': 'WX8002'}]}
+Demo password for all three accounts: Mvp1-Pass-2026!
+Start IMServer --db /Users/joyce/oop-project-Joyce/data/mvp1-demo.sqlite3

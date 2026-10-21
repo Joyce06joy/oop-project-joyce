@@ -1,0 +1,39 @@
+[1/2] Cleaning additional files...
+[2/2] Cleaning all built files...
+Cleaning... 31 files.
+[1/36] Building CXX object CMakeFiles/IMProtocol.dir/protocol/ProtocolDXX.cpp.o
+[2/36] Building CXX object CMakeFiles/IMProtocol.dir/protocol/JsonDXX.cpp.o
+[3/36] Building CXX object CMakeFiles/IMServerCore.dir/server/persistence/DatabaseDXX.cpp.o
+[4/36] Building CXX object CMakeFiles/IMServerCore.dir/server/persistence/StatementDXX.cpp.o
+[5/36] Linking CXX static library libIMProtocol.a
+[6/36] Building CXX object CMakeFiles/IMServerCore.dir/server/application/PasswordDXX.cpp.o
+[7/36] Automatic MOC and UIC for target IMClientUi
+[8/36] Building CXX object CMakeFiles/IMServerCore.dir/server/application/AuthServiceDXX.cpp.o
+[9/36] Building CXX object CMakeFiles/IMServerCore.dir/server/application/RequestDispatcherDXX.cpp.o
+[10/36] Building CXX object CMakeFiles/IMServerCore.dir/server/network/TcpServerDXX.cpp.o
+[11/36] Building CXX object CMakeFiles/IMClientUi.dir/IMClientUi_autogen/mocs_compilation.cpp.o
+[12/36] Building CXX object CMakeFiles/IMClientUi.dir/client/network/TcpClientDXX.cpp.o
+[13/36] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/LoginWindowDXX.cpp.o
+[14/36] Automatic MOC and UIC for target ProtocolTestsDXX
+[15/36] Linking CXX static library libIMServerCore.a
+[16/36] Automatic MOC and UIC for target oop-project-Joyce
+[17/36] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/RegisterWindowDXX.cpp.o
+[18/36] Building CXX object CMakeFiles/IMServer.dir/server/main.cpp.o
+[19/36] Building CXX object CMakeFiles/IMClientUi.dir/client/ui/ServiceSelectWindowDXX.cpp.o
+[20/36] Linking CXX static library libIMClientUi.a
+[21/36] Automatic MOC and UIC for target IMClient
+[22/36] Automatic MOC and UIC for target ClientUiTestsDXX
+[23/36] Building CXX object CMakeFiles/IMClient.dir/IMClient_autogen/mocs_compilation.cpp.o
+[24/36] Building CXX object CMakeFiles/oop-project-Joyce.dir/oop-project-Joyce_autogen/mocs_compilation.cpp.o
+[25/36] Building CXX object CMakeFiles/ProtocolTestsDXX.dir/ProtocolTestsDXX_autogen/mocs_compilation.cpp.o
+[26/36] Building CXX object CMakeFiles/oop-project-Joyce.dir/main.cpp.o
+[27/36] Building CXX object CMakeFiles/ClientUiTestsDXX.dir/ClientUiTestsDXX_autogen/mocs_compilation.cpp.o
+[28/36] Building CXX object CMakeFiles/ProtocolTestsDXX.dir/tests/protocol_main.cpp.o
+[29/36] Building CXX object CMakeFiles/oop-project-Joyce.dir/mainwindowdxx.cpp.o
+[30/36] Linking CXX executable IMServer
+[31/36] Linking CXX executable ProtocolTestsDXX
+[32/36] Linking CXX executable oop-project-Joyce.app/Contents/MacOS/oop-project-Joyce
+[33/36] Building CXX object CMakeFiles/IMClient.dir/client/main.cpp.o
+[34/36] Linking CXX executable IMClient.app/Contents/MacOS/IMClient
+[35/36] Building CXX object CMakeFiles/ClientUiTestsDXX.dir/tests/client_ui_main.cpp.o
+[36/36] Linking CXX executable ClientUiTestsDXX

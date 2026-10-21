@@ -1,0 +1,12 @@
+2026-10-21 20:57:17.818 ClientUiTestsDXX[8994:238106] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+2026-10-21 20:57:17.897 ClientUiTestsDXX[8994:238106] TSMSendMessageToUIServer: CFMessagePortSendRequest FAILED(-1) to send to port com.apple.tsm.uiserver
+2026-10-21 20:57:17.897 ClientUiTestsDXX[8994:238106] TSMSendMessageToUIServer: CFMessagePortSendRequest FAILED(-1) to send to port com.apple.tsm.uiserver
+2026-10-21 20:57:17.902 ClientUiTestsDXX[8994:238106] TSMSendMessageToUIServer: CFMessagePortSendRequest FAILED(-1) to send to port com.apple.tsm.uiserver
+2026-10-21 20:57:17.902 ClientUiTestsDXX[8994:238106] TSMSendMessageToUIServer: CFMessagePortSendRequest FAILED(-1) to send to port com.apple.tsm.uiserver
+2026-10-21 20:57:17.905 ClientUiTestsDXX[8994:238106] TSMSendMessageToUIServer: CFMessagePortSendRequest FAILED(-1) to send to port com.apple.tsm.uiserver
+2026-10-21 20:57:17.905 ClientUiTestsDXX[8994:238106] TSMSendMessageToUIServer: CFMessagePortSendRequest FAILED(-1) to send to port com.apple.tsm.uiserver
+T10 PASS: offline Qt window shows error
+T01–T05 Qt form checks PASS; 3 simultaneous Qt windows PASS; event-loop heartbeat PASS
+T08 process check PASS: three independent IMClient processes running (login exercised by Qt harness windows)
+Disconnect/retry/uncertain registration timeout and identical replay PASS
+ALL QT UI CHECKS PASSED

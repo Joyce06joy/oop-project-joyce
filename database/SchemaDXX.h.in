@@ -1,0 +1,3 @@
+#pragma once
+// Generated from the single authoritative database/schema.sql.
+inline constexpr const char* SchemaDXX=R"DXXSQL(@MVP1_SCHEMA@)DXXSQL";
