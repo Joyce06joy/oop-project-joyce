@@ -16,6 +16,7 @@
 #include <mutex>
 #include <thread>
 #include <tuple>
+#include <set>
 namespace { volatile sig_atomic_t stopping=0; void stopSignal(int) { stopping=1; } }
 TcpServerDXX::TcpServerDXX(std::string path,int port):path_(std::move(path)),port_(port) {}
 int TcpServerDXX::run() {
@@ -28,6 +29,9 @@ int TcpServerDXX::run() {
     // Network thread never touches SQLite. The worker owns DB and all sessions.
     std::mutex mutex; std::condition_variable ready; bool done=false;
     std::deque<std::pair<std::uint64_t,JsonDXX>> tasks,results;
+    std::map<std::uint64_t,std::size_t> queuedResultBytes;
+    std::set<std::uint64_t> overloaded;
+    constexpr std::size_t MaxQueuedBytes=8*(ProtocolDXX::MaxPayload+4);
     std::promise<void> initialized; auto startup=initialized.get_future();
     std::thread worker([&] {
         try {
@@ -39,8 +43,14 @@ int TcpServerDXX::run() {
                 auto result=dispatcher.dispatch(task.first,task.second);
                 auto events=dispatcher.takeEvents();
                 { std::lock_guard<std::mutex> lock(mutex);
-                  results.emplace_back(task.first,std::move(result));
-                  for(auto& event:events) results.push_back(std::move(event));
+                  auto append=[&](std::uint64_t id,JsonDXX value) {
+                      if(overloaded.count(id))return;
+                      const auto bytes=value.dump().size()+4;
+                      if(queuedResultBytes[id]+bytes>MaxQueuedBytes) {overloaded.insert(id);return;}
+                      queuedResultBytes[id]+=bytes;results.emplace_back(id,std::move(value));
+                  };
+                  append(task.first,std::move(result));
+                  for(auto& event:events) append(event.first,std::move(event.second));
                 }
             }
         } catch(...) { try { initialized.set_exception(std::current_exception()); } catch(...) {} }
@@ -53,17 +63,21 @@ int TcpServerDXX::run() {
     auto enqueue=[&](std::uint64_t id,const JsonDXX& request) { std::lock_guard<std::mutex> lock(mutex); tasks.emplace_back(id,request); ready.notify_one(); };
     auto disconnect=[&](int fd) { const auto id=ids.at(fd); close(fd); ids.erase(fd); decoders.erase(fd); output.erase(fd); pending.erase(id); enqueue(id,JsonDXX()); std::cout<<"disconnected "<<id<<std::endl; };
     while(!stopping) {
+        std::vector<int> closeOverloaded;
         { std::lock_guard<std::mutex> lock(mutex);
-          while(!results.empty()) { auto result=std::move(results.front()); results.pop_front(); for(const auto& entry:ids) if(entry.second==result.first) { try { output[entry.first]+=ProtocolDXX::frame(result.second); }
-                    catch(const std::exception&) { output[entry.first]+=ProtocolDXX::frame(ProtocolDXX::error(JsonDXX({}),"SERVER_ERROR","Response encoding failed")); }
+          for(auto id:overloaded) {for(auto& entry:ids)if(entry.second==id)closeOverloaded.push_back(entry.first);queuedResultBytes.erase(id);}
+          overloaded.clear();
+          while(!results.empty()) { auto result=std::move(results.front()); results.pop_front(); queuedResultBytes.erase(result.first); for(const auto& entry:ids) if(entry.second==result.first) { try { output[entry.first]+=ProtocolDXX::frame(result.second); }
+                    catch(const std::exception&) { output[entry.first]+=ProtocolDXX::frame(ProtocolDXX::error(result.second,"SERVER_ERROR","Response encoding failed")); }
                     if(result.second["kind"].text()=="response") --pending[result.first]; break; } }
         }
+        for(auto fd:closeOverloaded) if(ids.count(fd))disconnect(fd);
         std::vector<pollfd> polls{{listener,POLLIN,0}};
         for(const auto& entry:ids) polls.push_back({entry.first,static_cast<short>((pending[entry.second]<8?POLLIN:0)|(output[entry.first].empty()?0:POLLOUT)),0});
         if(poll(polls.data(),static_cast<nfds_t>(polls.size()),20)<0) { if(errno==EINTR) continue; break; }
         if(polls[0].revents&POLLIN) {
             int fd=accept(listener,nullptr,nullptr);
-            if(fd>=0) { if(ids.size()>=64||fcntl(fd,F_SETFL,O_NONBLOCK)<0) close(fd); else { ids[fd]=++serial; decoders.emplace(fd,ProtocolDXX()); pending[serial]=0; std::cout<<"connected "<<serial<<std::endl; } }
+            if(fd>=0) { if(ids.size()>=64||([&]{std::lock_guard<std::mutex> lock(mutex);return tasks.size()>=512;}())||fcntl(fd,F_SETFL,O_NONBLOCK)<0) close(fd); else { ids[fd]=++serial; decoders.emplace(fd,ProtocolDXX()); pending[serial]=0; std::cout<<"connected "<<serial<<std::endl; } }
         }
         for(std::size_t i=1;i<polls.size();++i) {
             const int fd=polls[i].fd; const auto events=polls[i].revents; bool lost=false;

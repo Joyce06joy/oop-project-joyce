@@ -1,6 +1,6 @@
-# IMPlatform — MVP 3
+# IMPlatform — MVP 4
 
-一台 Mac 上运行一个 POSIX TCP 服务端和多个 Qt 6 Widgets 客户端。在保留 MVP1 注册、密码登录、自动编号及持久化基础上，增加服务补开通、QQ/微信绑定、好友管理、共同好友与推荐、真实 Socket 事件推送。MVP3 增加 QQ/微信群、审批/邀请、角色权限、子群和运行时策略切换；本轮不包含聊天。
+一台 Mac 上运行一个 POSIX TCP 服务端和多个 Qt 6 Widgets 客户端。在保留 MVP1 注册、密码登录、自动编号及持久化基础上，增加服务补开通、QQ/微信绑定、好友管理、共同好友与推荐、真实 Socket 事件推送。MVP3 增加 QQ/微信群、审批/邀请、角色权限、子群和运行时策略切换；MVP4 接入真实 TCP 文本单聊、群聊、QQ 子群聊天、消息历史、离线同步与接收 ACK；不包含媒体或已读。
 
 ## 本机依赖与构建
 
@@ -19,10 +19,10 @@ brew install json-c openssl@3
 
 ```sh
 export PATH="$HOME/Qt/Tools/CMake/CMake.app/Contents/bin:$HOME/Qt/Tools/Ninja:$PATH"
-cmake -S . -B build/mvp3 -G Ninja \
+cmake -S . -B build/mvp4 -G Ninja \
   -DCMAKE_PREFIX_PATH="$HOME/Qt/6.12.0/macos" -DCMAKE_BUILD_TYPE=Debug
-cmake --build build/mvp3 --parallel 4
-ctest --test-dir build/mvp3 --output-on-failure
+cmake --build build/mvp4 --parallel 4
+ctest --test-dir build/mvp4 --output-on-failure
 ```
 
 没有 Ninja 时可去掉 `-G Ninja`，并使用新的构建目录。只构建程序可加 `-DBUILD_TESTING=OFF`。在限制回环网络的执行沙箱中，集成测试需要允许本机 TCP；不能把 PermissionError 当作产品测试通过。
@@ -39,13 +39,13 @@ ctest --test-dir build/mvp3 --output-on-failure
 命令行运行：
 
 ```sh
-./build/mvp3/IMServer --db ./data/manual.sqlite3
+./build/mvp4/IMServer --db ./data/manual.sqlite3
 ```
 
 另开三个终端，每个执行一次：
 
 ```sh
-./build/mvp3/IMClient.app/Contents/MacOS/IMClient
+./build/mvp4/IMClient.app/Contents/MacOS/IMClient
 ```
 
 仅监听 `127.0.0.1`；默认端口 8888，两个程序都支持 `--port 8890` 等自选端口，必须匹配。不提供对外绑定选项。
@@ -54,7 +54,7 @@ ctest --test-dir build/mvp3 --output-on-failure
 
 - 注册登录名为 3–32 位 ASCII 英文、数字或下划线，大小写不敏感；服务器统一小写保存，SQL 使用同样的 NOCASE 唯一约束。昵称 1–96 UTF-8 字节；密码 8–128 UTF-8 字节；所在地最多 160 字节；生日可留空，填写时限 1900 年至今天的有效日期。
 - 勾选至少一种服务。QQ/微博共享号码（10001 起），同一用户同时开通二者时号码相同；微信号码 WX8001 起。仅开通微信不会生成 QQ/微博账号或消耗共享编号。
-- 注册成功后页面显示用户 ID、UTC 注册时间和各服务号码，可复制。返回登录，用登录名和密码登录，再选择已开通服务。激活状态保存在当前连接会话内；退出或断线后失效。
+- 注册成功后页面显示用户 ID、UTC 注册时间和各服务号码，可复制。返回登录，用登录名和密码登录，再选择已开通服务。激活状态保存在当前连接会话内；退出或断线后原会话失效；MVP4可异步重新认证并恢复先前激活的服务。
 - 表单错误保留输入；注册提交期间禁用重复提交。超时、断线或临时数据库错误时，不把未知结果认定为失败：保留并锁定原输入，恢复连接后重试原请求。已确认成功才显示成功界面。
 - 未知注册请求保留在当前客户端内存中；完全退出客户端会丢失待重试的请求编号。如需避免重复，优先登录原登录名确认结果。本阶段不持久化未确认请求或密码。
 - 窗口每次运行可完成一次注册；若要继续创建另一个账号，可再开一个客户端。
@@ -65,7 +65,7 @@ SQLite **仅服务端打开**。不指定 `--db` 时路径是：
 ~/Library/Application Support/IMPlatformMVP1/implatform.sqlite3
 ```
 
-`--db` 支持新路径并创建父目录。数据库旁的 `.lock` 文件用于进程独占；不要删除正在使用的锁文件。普通启动不清空任何用户。版本 0 的空数据库先从 `database/schema.sql` 初始化 v1，再依序应用 `002_friends.sql` 和 `003_groups.sql` 升级 v3；已有 v1/v2 库先做 SQLite 在线备份并校验，再事务升级。备份名为原路径加 `.v1-backup.sqlite3` 或 `.v2-backup.sqlite3`，已存在时追加序号，绝不覆盖。原 users、accounts、计数器和注册幂等记录不重建。未知非空库或不支持的版本仍拒绝启动；旧课设目录数据不会自动读取。
+`--db` 支持新路径并创建父目录。数据库旁的 `.lock` 文件用于进程独占；不要删除正在使用的锁文件。普通启动不清空任何用户。版本 0 的空数据库先从 `database/schema.sql` 初始化 v1，再依序应用 `002_friends.sql`、`003_groups.sql` 和 `004_chat.sql` 升级 v4；已有 v1/v2/v3 库先做 SQLite 在线备份并校验，再事务升级。备份名为原路径加 `.v1-backup.sqlite3` 、`.v2-backup.sqlite3` 或 `.v3-backup.sqlite3`，已存在时追加序号，绝不覆盖。原 users、accounts、计数器和注册幂等记录不重建。未知非空库或不支持的版本仍拒绝启动；旧课设目录数据不会自动读取。
 
 ## MVP2 五用户演示与显式重置
 
@@ -73,7 +73,7 @@ SQLite **仅服务端打开**。不指定 `--db` 时路径是：
 
 ```sh
 python3 demo/seed_mvp2.py
-./build/mvp3/IMServer --db ./data/mvp2-demo.sqlite3
+./build/mvp4/IMServer --db ./data/mvp2-demo.sqlite3
 ```
 
 Alice、Bob、David 已有三服务，Carol 只有微信，Emily 只有 QQ；演示密码均为 `Mvp2-Pass-2026!`，仅用于本机演示。脚本使用独立临时端口通过真实 TCP 生成场景后正常停止，随后请用上面的命令启动演示服务器，再启动三个 IMClient 分别登录。
@@ -106,16 +106,16 @@ python3 demo/seed_mvp2.py --reset
 
 ## 验证与文档
 
-新增 `tests/mvp2_acceptance.py` 覆盖17项服务/迁移/推送测试，`tests/mvp2_ui_main.cpp` 覆盖真实 Qt 好友、账号与推荐流程。MVP2 阶段 `ctest` 为5组（MVP3 当前为9组）：旧协议、旧服务、旧Qt UI、新服务、新Qt UI。新增 UI 原生运行：
+新增 `tests/mvp2_acceptance.py` 覆盖17项服务/迁移/推送测试，`tests/mvp2_ui_main.cpp` 覆盖真实 Qt 好友、账号与推荐流程。MVP2 阶段 `ctest` 为5组（MVP3 为9组，MVP4 当前为13组）：旧协议、旧服务、旧Qt UI、新服务、新Qt UI。新增 UI 原生运行：
 
 ```sh
-QT_QPA_PLATFORM=cocoa ./build/mvp3/Mvp2UiTestsDXX ./build/mvp3/IMServer
+QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp2UiTestsDXX ./build/mvp4/IMServer
 ```
 
 
 - `tests/acceptance.py`：真实 TCP/SQLite 验收，独立临时数据库；包括异常写入回滚、并发幂等、重启、非法报文及服务器存活。
 - `tests/protocol_main.cpp`：分帧/合帧、严格 UTF-8/JSON、JSON 深拷贝、异常响应大小。
-- `tests/client_ui_main.cpp`：实际 Qt Widgets 操作，注册/错误密码保留字段/服务激活、三窗口、独立进程、断线、15 秒超时及原请求重试、退出恢复。CTest 默认 offscreen；可直接运行 `QT_QPA_PLATFORM=cocoa ./build/mvp3/ClientUiTestsDXX ./build/mvp3/IMServer ./build/mvp3/IMClient.app/Contents/MacOS/IMClient` 检查 macOS 原生平台。
+- `tests/client_ui_main.cpp`：实际 Qt Widgets 操作，注册/错误密码保留字段/服务激活、三窗口、独立进程、断线、15 秒超时及原请求重试、退出恢复。CTest 默认 offscreen；可直接运行 `QT_QPA_PLATFORM=cocoa ./build/mvp4/ClientUiTestsDXX ./build/mvp4/IMServer ./build/mvp4/IMClient.app/Contents/MacOS/IMClient` 检查 macOS 原生平台。
 - [MVP2 逐项测试报告（含 MVP1 回归）](docs/MVP2_TEST_REPORT.md)
 - [MVP1 历史报告](docs/TEST_REPORT.md)
 - [MVP2 实施报告与文件变化](docs/MVP2_IMPLEMENTATION_REPORT.md)
@@ -132,9 +132,9 @@ QT_QPA_PLATFORM=cocoa ./build/mvp3/Mvp2UiTestsDXX ./build/mvp3/IMServer
 
 ```sh
 python3 demo/seed_mvp3.py
-./build/mvp3/IMServer --db ./data/mvp3-demo.sqlite3
+./build/mvp4/IMServer --db ./data/mvp3-demo.sqlite3
 # 在另外三个终端分别启动同一客户端命令
-./build/mvp3/IMClient.app/Contents/MacOS/IMClient
+./build/mvp4/IMClient.app/Contents/MacOS/IMClient
 ```
 
 演示账号 Alice、Bob、Carol、David；密码均为 `Mvp3-Pass-2026!`，只用于本机演示。QQ展示号10001–10004，微信WX8001–WX8004。两个平台各预置群号1001–1006，新建群继续分配1007起，不限制为固定六群。
@@ -151,11 +151,11 @@ python3 demo/seed_mvp3.py
 ## MVP3 验收资料
 
 ```sh
-ctest --test-dir build/mvp3 --output-on-failure
-QT_QPA_PLATFORM=cocoa ./build/mvp3/Mvp3UiTestsDXX ./build/mvp3/IMServer
+ctest --test-dir build/mvp4 --output-on-failure
+QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp3UiTestsDXX ./build/mvp4/IMServer
 ```
 
-当前共9组CTest，包含MVP1/MVP2原5组、纯C++策略、数据库约束、MVP3真实TCP和Qt群界面。Qt Creator的实际人工菜单验收状态以测试报告为准，CMake构建通过不能替代该验收。
+MVP3 阶段共9组CTest（MVP4 当前13组），包含MVP1/MVP2原5组、纯C++策略、数据库约束、MVP3真实TCP和Qt群界面。Qt Creator的实际人工菜单验收状态以测试报告为准，CMake构建通过不能替代该验收。
 
 - [实现报告与文件清单](docs/MVP3_IMPLEMENTATION_REPORT.md)
 - [逐项测试报告及未运行项](docs/MVP3_TEST_REPORT.md)
@@ -163,3 +163,45 @@ QT_QPA_PLATFORM=cocoa ./build/mvp3/Mvp3UiTestsDXX ./build/mvp3/IMServer
 - [数据库迁移、ER及恢复](docs/DB_SCHEMA_V3.md)
 - [动态多态UML及事务时序](docs/UML_GROUP_POLICY.md)
 - [基线审计](docs/MVP3_AUDIT.md)、[原始任务书](docs/MVP3_WORK_SPEC.md)
+
+
+## MVP4 三客户端聊天演示
+
+```sh
+python3 demo/seed_mvp4.py
+./build/mvp4/IMServer --db ./data/mvp4-demo.sqlite3
+# 再在三个独立终端各执行一次
+./build/mvp4/IMClient.app/Contents/MacOS/IMClient
+```
+
+Alice、Bob、Carol 密码均为 `Mvp4-Pass-2026!`，QQ展示号10001/10002/10003，微信WX8001/WX8002/WX8003。Alice与Bob、Alice与Carol已在QQ/微信成为好友；QQ主群group_pk=1、微信主群group_pk=2；QQ子群subgroup_pk=1只有Alice与Bob。种子通过真实TCP保存9条含中文/emoji消息。首次运行遇已有专用库会拒绝覆盖；停止其服务器并明确需要重置时才使用 `python3 demo/seed_mvp4.py --reset`。其他MVP库、默认用户库保持不变。
+
+1. 三个独立客户端分别登录，先手动激活QQ。好友列表选中Bob/Alice，点击“发消息”，进入“消息”页；也可从最近会话进入。发送中文/emoji后观察本地pending、服务器确认stored；对方收到后由真实ACK产生送达状态，不显示已读。
+2. 激活微信并切微信空间，同平台好友重复单聊；微博没有消息入口，手工构造聊天请求也会被服务器拒绝。
+3. 群组中进入QQ/微信群详情，选择“进入群聊”，三人分别发言。QQ子群从临时子群入口进入，只有Alice/Bob可访问；Carol不能收到/查询其消息。
+4. Alice在群组详情双确认切微信管理模式，QQ子群聊天停用且历史/成员不删除，切回QQ恢复。原属平台仍为QQ。群成员退出/踢出后不能发送，历史只显示其有效成员区间；重入不能查看离群期间消息。
+5. 关闭Bob客户端，Alice连续发消息，再启动Bob并登录/激活，最近会话与历史可恢复。默认最近50条，向上滚动或“加载更早消息”分页；每页同时受64KiB网络帧字节预算约束，长正文页可能少于50条。
+6. 切换会话保留当前未发送草稿。网络断开/超时标unknown，使用“重试所选消息（原编号）”安全重试；明确拒绝显示failed，保留可恢复正文。不要用新消息编号重发未知状态消息。
+7. 停止并重启Server，客户端进行有上限的异步退避重连、重新认证与原服务恢复，再按已知游标查漏。恢复失败/达到上限时点击重试连接或重新登录。应用内存保存本次会话所需登录信息用于恢复，退出登录清除，不将密码或消息正文写本地SQLite。
+
+同步游标为当前进程内、按用户/服务隔离；进程重启先重新查询服务器会话/最近历史，不复用可能属于别的演示库的本地持久游标。完全关闭应用不会保存未确认发送和草稿；历史内容仍在服务器。发送资格每次由服务器重新判断，删除好友保留单聊历史但禁止新发送。
+
+本机Socket排错：先确认Server输出listening和客户端端口一致；已有同库Server持锁时不要删除.lock绕过，先正常停止旧Server。自动重连后若需手工登录，重新激活相关服务；未激活不是“网络成功即可发送”。数据库只在Server打开。慢客户端会被有限队列策略断开，离线内容仍可从持久消息恢复。
+
+## MVP4 交付与验收
+
+```sh
+ctest --test-dir build/mvp4 --output-on-failure
+QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp4UiTestsDXX \
+  ./build/mvp4/IMServer ./build/mvp4/IMClient.app/Contents/MacOS/IMClient \
+  ./docs/test-evidence/mvp4-native
+```
+
+- [MVP4 实施报告与修改清单](docs/MVP4_IMPLEMENTATION_REPORT.md)
+- [MVP4 逐项测试结果、命令和真实证据](docs/MVP4_TEST_REPORT.md)
+- [聊天协议与幂等/回执](docs/PROTOCOL_V4.md)
+- [v4 数据库/ER/成员历史窗口及恢复](docs/DB_SCHEMA_V4.md)
+- [消息UML、线程模型与发送/ACK时序](docs/UML_MESSAGE_NETWORK.md)
+- [真实基线审计](docs/MVP4_AUDIT.md)、[原任务书](docs/MVP4_WORK_SPEC.md)
+
+自动化三进程测试使用真实IMClient可执行文件、独立PID/连接与可见Qt控件，不共享聊天模型；`--chat-smoke`参数仅驱动本机测试登录/操作，正常启动不启用。Qt Creator菜单人工验收是否执行，以逐项报告为准，不由命令行CMake通过代替。

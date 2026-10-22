@@ -1,4 +1,5 @@
 #include "WorkspaceDXX.h"
+#include "ChatPageDXX.h"
 #include "AccountPageDXX.h"
 #include "GroupPageDXX.h"
 #include "FriendPageDXX.h"
@@ -60,6 +61,10 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   tabs_->addTab(accounts_, QStringLiteral("账号"));
   groups_ = new GroupPageDXX(c);
   tabs_->addTab(groups_, QStringLiteral("群组"));
+  chat_ = new ChatPageDXX(c);
+  tabs_->addTab(chat_, QStringLiteral("消息"));
+  connect(friends_, &FriendPageDXX::chatRequested, this, [this](const QString &target) { tabs_->setCurrentWidget(chat_); chat_->openPrivate(target); });
+  connect(groups_, &GroupPageDXX::chatRequested, this, [this](qint64 group,qint64 subgroup) { tabs_->setCurrentWidget(chat_); chat_->openGroup(group,subgroup); });
   connect(tabs_, &QTabWidget::currentChanged, this,
           [this] { refreshCurrent(); });
   connect(recommendations_, &RecommendationPageDXX::settingsRequested, this,
@@ -86,7 +91,7 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
                         .arg(QString::fromStdString(e["type"].text())));
     if (e["type"].text().find("account.") == 0) {
       scheduleRefresh(true);
-    } else {
+    } else if (e["type"].text().find("chat.") != 0) {
       const auto s = e["data"]["service_type"].text();
       if (s.empty() || s == service_.toStdString())
         scheduleRefresh();
@@ -143,6 +148,10 @@ void WorkspaceDXX::selectService(const QString &s) {
 void WorkspaceDXX::refreshCurrent() {
   bool enabled = active();
   tabs_->setTabVisible(4, service_ != "WEIBO");
+  tabs_->setTabVisible(5, service_ != "WEIBO");
+  QString display;
+  for (const auto &s : services_.items()) if(s["service_type"].text()==service_.toStdString()) display=QString::fromStdString(s["display_id"].text());
+  chat_->setAccount(user_,service_,display,enabled);
   groups_->setEnabled(enabled && service_ != "WEIBO");
   friends_->setEnabled(enabled);
   requests_->setEnabled(enabled);
@@ -163,6 +172,8 @@ void WorkspaceDXX::refreshCurrent() {
       requests_->setService(service_);
     else if (tabs_->currentWidget() == groups_)
       groups_->setService(service_);
+    else if(tabs_->currentWidget() == chat_)
+      chat_->refresh();
     else
       recommendations_->refresh();
   }

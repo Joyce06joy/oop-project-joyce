@@ -1,0 +1,2 @@
+#pragma once
+inline constexpr const char* MigrationV4DXX=R"MIGRATION(@MVP4_MIGRATION@)MIGRATION";

@@ -35,6 +35,7 @@ SubgroupPageDXX::SubgroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
     mutate("group.subgroup.create", {{"group_pk", group_}, {"name", name_->text().toStdString()},
       {"member_display_ids", JsonDXX::array(ids)}}, [this](const JsonDXX &) { refresh(); });
   });
+  button("subgroupChat", QStringLiteral("进入子群聊天"), [this] { if(enabled_&&subgroup_)emit chatRequested(group_,subgroup_); });
   button("subgroupRefresh", QStringLiteral("刷新"), [this] { refresh(); });
   button("subgroupNext", QStringLiteral("下一页子群"), [this] { if (!next_.isEmpty()) { cursor_ = next_; load(); } });
   groups_ = new QListWidget; groups_->setObjectName("subgroupResults"); l->addWidget(groups_);

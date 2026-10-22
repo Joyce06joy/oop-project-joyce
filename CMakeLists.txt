@@ -83,6 +83,8 @@ file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/migrations/002_friends.sql" MVP2
 configure_file(database/MigrationDXX.h.in generated/MigrationDXX.h @ONLY)
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/migrations/003_groups.sql" MVP3_MIGRATION)
 configure_file(database/MigrationV3DXX.h.in generated/MigrationV3DXX.h @ONLY)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/migrations/004_chat.sql" MVP4_MIGRATION)
+configure_file(database/MigrationV4DXX.h.in generated/MigrationV4DXX.h @ONLY)
 add_library(IMProtocol STATIC protocol/JsonDXX.cpp protocol/ProtocolDXX.cpp)
 set_target_properties(IMProtocol PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_include_directories(IMProtocol PUBLIC protocol)
@@ -101,6 +103,7 @@ add_library(IMServerCore STATIC
     server/application/AccountServiceDXX.cpp server/persistence/MutationRepositoryDXX.cpp
     server/application/FriendServiceDXX.cpp server/application/RecommendationServiceDXX.cpp
     server/application/GroupServiceDXX.cpp server/persistence/GroupRepositoryDXX.cpp
+    server/application/MessageServiceDXX.cpp server/persistence/MessageRepositoryDXX.cpp
     server/application/RequestDispatcherDXX.cpp server/network/TcpServerDXX.cpp)
 set_target_properties(IMServerCore PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_include_directories(IMServerCore PUBLIC server/persistence server/application server/network
@@ -115,7 +118,8 @@ add_library(IMClientUi STATIC
     client/ui/RequestPanelDXX.cpp client/ui/FriendPageDXX.cpp
     client/ui/FriendRequestPageDXX.cpp client/ui/RecommendationPageDXX.cpp
     client/ui/AccountPageDXX.cpp client/ui/WorkspaceDXX.cpp
-    client/ui/GroupPageDXX.cpp client/ui/GroupPolicyDialogDXX.cpp client/ui/SubgroupPageDXX.cpp)
+    client/ui/GroupPageDXX.cpp client/ui/GroupPolicyDialogDXX.cpp client/ui/SubgroupPageDXX.cpp
+    client/ui/ChatPageDXX.cpp client/ui/MessageModelDXX.cpp)
 target_include_directories(IMClientUi PUBLIC client/network client/ui)
 target_link_libraries(IMClientUi PUBLIC IMProtocol Qt6::Widgets Qt6::Network)
 qt_add_executable(IMClient client/main.cpp)
@@ -168,4 +172,22 @@ if(BUILD_TESTING)
     target_link_libraries(Mvp3UiTestsDXX PRIVATE IMClientUi Qt6::Test)
     add_test(NAME mvp3_ui COMMAND Mvp3UiTestsDXX $<TARGET_FILE:IMServer>)
     set_tests_properties(mvp3_ui PROPERTIES TIMEOUT 180 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+endif()
+
+if(BUILD_TESTING)
+    add_test(NAME mvp4_database COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/mvp4_database.py")
+    add_test(NAME mvp4_acceptance COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/mvp4_acceptance.py" --server $<TARGET_FILE:IMServer>)
+    set_tests_properties(mvp4_acceptance PROPERTIES TIMEOUT 420)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(Mvp4UiTestsDXX tests/mvp4_ui_main.cpp)
+    target_link_libraries(Mvp4UiTestsDXX PRIVATE IMClientUi Qt6::Test)
+    add_test(NAME mvp4_ui COMMAND Mvp4UiTestsDXX $<TARGET_FILE:IMServer> $<TARGET_FILE:IMClient>)
+    set_tests_properties(mvp4_ui PROPERTIES TIMEOUT 180 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+endif()
+
+if(BUILD_TESTING)
+    add_test(NAME mvp4_receipts COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/mvp4_receipts.py" --server $<TARGET_FILE:IMServer>)
+    set_tests_properties(mvp4_receipts PROPERTIES TIMEOUT 90)
 endif()

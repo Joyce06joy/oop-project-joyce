@@ -1,0 +1,34 @@
+M4-T02 PASS (real TCP / temporary SQLite)
+M4-T03 PASS (real TCP / temporary SQLite)
+M4-T04 PASS (real TCP / temporary SQLite)
+M4-T05 PASS (real TCP / temporary SQLite)
+M4-T06 PASS (real TCP / temporary SQLite)
+M4-T07 PASS (real TCP / temporary SQLite)
+M4-T08 PASS (real TCP / temporary SQLite)
+M4-T09 PASS (real TCP / temporary SQLite)
+M4-T10 PASS (real TCP / temporary SQLite)
+M4-T11 FAIL: EOFError: server closed socket
+Traceback (most recent call last):
+  File "/Users/joyce/oop-project-Joyce/tests/mvp4_acceptance.py", line 348, in main
+    server.start(); getattr(Acceptance(server,directory),'test%02d'%number)()
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/joyce/oop-project-Joyce/tests/mvp4_acceptance.py", line 179, in test11
+    while not set(ids)<=a.responses.keys(): a.receive(max(.01,deadline-time.monotonic()))
+                                            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joyce/oop-project-Joyce/tests/mvp2_helpers.py", line 25, in receive
+    if not block: raise EOFError('server closed socket')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+EOFError: server closed socket
+M4-T12 PASS (real TCP / temporary SQLite)
+M4-T13 PASS (real TCP / temporary SQLite)
+M4-T14 PASS (real TCP / temporary SQLite)
+M4-T15 PASS (real TCP / temporary SQLite)
+M4-T16 PASS (real TCP / temporary SQLite)
+M4-T17 PASS (real TCP / temporary SQLite)
+M4-T18 PASS (real TCP / temporary SQLite)
+M4-T19 PASS (real TCP / temporary SQLite)
+M4-T20 PASS (real TCP / temporary SQLite)
+M4-T22 PASS (real TCP / temporary SQLite)
+M4-T01/T21 NOT RUN here: independent native Qt processes / Qt Creator evidence is separate.
+T13/T15/T16 scope here: server failure/concurrency/restart only; GUI states need native evidence.
+19 passed; 1 failed; 0 not selected

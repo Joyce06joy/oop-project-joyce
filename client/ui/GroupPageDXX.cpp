@@ -41,6 +41,8 @@ GroupPageDXX::GroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   auto *detailPage=new QWidget; auto *detailLayout=new QVBoxLayout(detailPage); scroll->setWidget(detailPage);
   summary_=new QLabel; summary_->setObjectName("groupSummary"); summary_->setWordWrap(true); summary_->setTextFormat(Qt::PlainText); detailLayout->addWidget(summary_);
   row=new QHBoxLayout; detailLayout->addLayout(row);
+  auto *chat=button(row,"groupChat",QStringLiteral("进入群聊"),[this] {if(group_&&detail_["is_member"].boolean())emit chatRequested(group_,0);});
+  Q_UNUSED(chat);
   apply_=button(row,"groupApply",QStringLiteral("申请加入"),[this] { mutation("group.join.apply",{}); });
   button(row,"groupDetailRefresh",QStringLiteral("刷新详情"),[this] { loadDetail(); });
   target_=field("groupTarget",QStringLiteral("受邀者展示 ID（由对方确认）"),detailLayout);
@@ -99,6 +101,7 @@ GroupPageDXX::GroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   reject_=button(row,"groupRequestReject",QStringLiteral("拒绝"),[this]{respond("REJECT");});
   tabs->addTab(requestPage,QStringLiteral("申请与邀请"));
   subgroups_=new SubgroupPageDXX(c); tabs->addTab(subgroups_,QStringLiteral("临时子群"));
+  connect(subgroups_,&SubgroupPageDXX::chatRequested,this,&GroupPageDXX::chatRequested);
   connect(subgroups_,&RequestPanelDXX::changed,this,[this]{refresh();emit changed();});
   connect(subgroups_,&RequestPanelDXX::authenticationRequired,this,&RequestPanelDXX::authenticationRequired);
   connect(groups_,&QListWidget::currentRowChanged,this,[this](int r){

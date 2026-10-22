@@ -15,6 +15,8 @@ public:
   void refresh();
   void resetGroupUser(const QString &user);
   bool pending() const;
+signals:
+  void chatRequested(qint64 group,qint64 subgroup);
 private:
   QString service_ = "QQ", cursor_, next_, memberCursor_, memberNext_, requestCursor_, requestNext_;
   qint64 group_ = 0;

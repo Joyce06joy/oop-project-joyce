@@ -1,0 +1,4 @@
+M4-T22 PASS (real TCP / temporary SQLite)
+M4-T01/T21 NOT RUN here: independent native Qt processes / Qt Creator evidence is separate.
+T13/T15/T16 scope here: server failure/concurrency/restart only; GUI states need native evidence.
+1 passed; 0 failed; 19 not selected

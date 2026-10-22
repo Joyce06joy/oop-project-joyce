@@ -1,0 +1,548 @@
+Start testing: Oct 22 08:51 CST
+----------------------------------------------------------
+1/13 Testing: protocol
+1/13 Test: protocol
+Command: "/Users/joyce/oop-project-Joyce/build/mvp4/ProtocolTestsDXX"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"protocol" start time: Oct 22 08:51 CST
+Output:
+----------------------------------------------------------
+Protocol: fragmented/coalesced frames, invalid length/UTF8/JSON, envelopes PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"protocol" end time: Oct 22 08:51 CST
+"protocol" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/13 Testing: acceptance
+2/13 Test: acceptance
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/acceptance.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"acceptance" start time: Oct 22 08:51 CST
+Output:
+----------------------------------------------------------
+T01 T02 T03 PASS: saved registrations and ID spaces
+T04 PASS; T05 service PASS; three simultaneous TCP sessions PASS
+T09 PASS: normalized replay, conflict, duplicate login
+T11 PASS: split/coalesced/invalid length/UTF8/JSON
+T07 T12 PASS: injected SQL failure rolls back user/accounts/counter/request; constraints
+Concurrent registration/replay, connection-bound sessions, exclusive DB ownership PASS
+T06 T14 PASS: restart preserves users and idempotency
+T13 PASS: server logs contain no test passwords/auth bodies
+ALL SERVICE/PROTOCOL ACCEPTANCE CHECKS PASSED
+<end of output>
+Test time =   1.63 sec
+----------------------------------------------------------
+Test Passed.
+"acceptance" end time: Oct 22 08:51 CST
+"acceptance" time elapsed: 00:00:01
+----------------------------------------------------------
+
+3/13 Testing: client_ui
+3/13 Test: client_ui
+Command: "/Users/joyce/oop-project-Joyce/build/mvp4/ClientUiTestsDXX" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer" "/Users/joyce/oop-project-Joyce/build/mvp4/IMClient.app/Contents/MacOS/IMClient"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"client_ui" start time: Oct 22 08:51 CST
+Output:
+----------------------------------------------------------
+qt.qpa.fonts: Populating font family aliases took 49 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support raise()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support raise()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support raise()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support raise()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+T10 PASS: offline Qt window shows error
+T01–T05 Qt form checks PASS; 3 simultaneous Qt windows PASS; event-loop heartbeat PASS
+T08 process check PASS: three independent IMClient processes running (login exercised by Qt harness windows)
+Disconnect/retry/uncertain registration timeout and identical replay PASS
+ALL QT UI CHECKS PASSED
+<end of output>
+Test time =  18.25 sec
+----------------------------------------------------------
+Test Passed.
+"client_ui" end time: Oct 22 08:51 CST
+"client_ui" time elapsed: 00:00:18
+----------------------------------------------------------
+
+4/13 Testing: mvp2_acceptance
+4/13 Test: mvp2_acceptance
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/mvp2_acceptance.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp2_acceptance" start time: Oct 22 08:51 CST
+Output:
+----------------------------------------------------------
+M2-T01 PASS
+M2-T02 PASS
+M2-T03 PASS
+M2-T04 PASS
+M2-T05 PASS
+M2-T06 PASS
+M2-T07 PASS
+M2-T08 PASS
+M2-T09 PASS
+M2-T10 PASS
+M2-T11 PASS
+M2-T12 PASS
+M2-T13 PASS
+M2-T14 PASS
+M2-T15 PASS
+M2-T16 PASS
+M2-T17 PASS
+M2-T18 PARTIAL: IMServer built externally and startup exercised; Qt Creator and three-client GUI require separate evidence.
+M2-T14 scope: server SQL rollback and disconnect only; GUI responsiveness requires separate evidence.
+17 passed; 0 failed; 0 not selected
+<end of output>
+Test time =  17.37 sec
+----------------------------------------------------------
+Test Passed.
+"mvp2_acceptance" end time: Oct 22 08:52 CST
+"mvp2_acceptance" time elapsed: 00:00:17
+----------------------------------------------------------
+
+5/13 Testing: mvp2_ui
+5/13 Test: mvp2_ui
+Command: "/Users/joyce/oop-project-Joyce/build/mvp4/Mvp2UiTestsDXX" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp2_ui" start time: Oct 22 08:52 CST
+Output:
+----------------------------------------------------------
+qt.qpa.fonts: Populating font family aliases took 47 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+PASS real-socket Qt: explicit activation, search/pagination, send/accept/reject, pushes, remark, delete confirmation, binding/unbinding/open, recommendations/mutual/common
+PASS genuine 15-second timeout and disconnect identical replay; push dedup; UI heartbeat
+<end of output>
+Test time =  20.45 sec
+----------------------------------------------------------
+Test Passed.
+"mvp2_ui" end time: Oct 22 08:52 CST
+"mvp2_ui" time elapsed: 00:00:20
+----------------------------------------------------------
+
+6/13 Testing: group_policy
+6/13 Test: group_policy
+Command: "/Users/joyce/oop-project-Joyce/build/mvp4/GroupPolicyTestsDXX"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"group_policy" start time: Oct 22 08:52 CST
+Output:
+----------------------------------------------------------
+PASS group policy: 47 checks (pure C++17, runtime dispatch, restoration)
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"group_policy" end time: Oct 22 08:52 CST
+"group_policy" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/13 Testing: group_database
+7/13 Test: group_database
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/group_database.py"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"group_database" start time: Oct 22 08:52 CST
+Output:
+----------------------------------------------------------
+PASS schema v3: deferred owner membership, platform/role invariants, parent subset FK/cascade, policy preservation, immutable service
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"group_database" end time: Oct 22 08:52 CST
+"group_database" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/13 Testing: mvp3_acceptance
+8/13 Test: mvp3_acceptance
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/mvp3_acceptance.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp3_acceptance" start time: Oct 22 08:52 CST
+Output:
+----------------------------------------------------------
+M3-T01 PASS
+M3-T02 PASS
+M3-T03 PASS
+M3-T04 PASS
+M3-T05 PASS
+M3-T06 PASS
+M3-T07 PASS
+M3-T08 PASS
+M3-T09 PASS
+M3-T10 PASS
+M3-T11 PASS
+M3-T12 PASS
+M3-T13 PASS
+M3-T14 PASS
+M3-T15 PASS
+M3-T16 PASS
+M3-T17 PASS
+M3-T18 PASS
+M3-T19 PASS
+M3-T20 PASS
+M3-T21 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+21 passed; 0 failed; 0 not selected
+<end of output>
+Test time =  25.53 sec
+----------------------------------------------------------
+Test Passed.
+"mvp3_acceptance" end time: Oct 22 08:53 CST
+"mvp3_acceptance" time elapsed: 00:00:25
+----------------------------------------------------------
+
+9/13 Testing: mvp3_ui
+9/13 Test: mvp3_ui
+Command: "/Users/joyce/oop-project-Joyce/build/mvp4/Mvp3UiTestsDXX" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp3_ui" start time: Oct 22 08:53 CST
+Output:
+----------------------------------------------------------
+qt.qpa.fonts: Populating font family aliases took 45 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+PASS MVP3 real Qt TCP: explicit activation, QQ create/search/apply/approve/admin/announcement/rename/kick/leave/disband, subgroup members, policy confirmation and restored roles/data, WeChat invitation self-decision, failure input preservation, SQL rollback with same UUID retry, pushes, legacy tabs
+<end of output>
+Test time =   5.09 sec
+----------------------------------------------------------
+Test Passed.
+"mvp3_ui" end time: Oct 22 08:53 CST
+"mvp3_ui" time elapsed: 00:00:05
+----------------------------------------------------------
+
+10/13 Testing: mvp4_database
+10/13 Test: mvp4_database
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/mvp4_database.py"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp4_database" start time: Oct 22 08:53 CST
+Output:
+----------------------------------------------------------
+MVP4 populated v3 migration preserves old rows and seeds windows PASS
+MVP4 same-second membership epochs, parent cascade, disband, old data PASS
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"mvp4_database" end time: Oct 22 08:53 CST
+"mvp4_database" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/13 Testing: mvp4_acceptance
+11/13 Test: mvp4_acceptance
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/mvp4_acceptance.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp4_acceptance" start time: Oct 22 08:53 CST
+Output:
+----------------------------------------------------------
+M4-T02 PASS (real TCP / temporary SQLite)
+M4-T03 PASS (real TCP / temporary SQLite)
+M4-T04 PASS (real TCP / temporary SQLite)
+M4-T05 PASS (real TCP / temporary SQLite)
+M4-T06 PASS (real TCP / temporary SQLite)
+M4-T07 PASS (real TCP / temporary SQLite)
+M4-T08 PASS (real TCP / temporary SQLite)
+M4-T09 PASS (real TCP / temporary SQLite)
+M4-T10 PASS (real TCP / temporary SQLite)
+M4-T11 PASS (real TCP / temporary SQLite)
+M4-T12 PASS (real TCP / temporary SQLite)
+M4-T13 PASS (real TCP / temporary SQLite)
+M4-T14 PASS (real TCP / temporary SQLite)
+M4-T15 PASS (real TCP / temporary SQLite)
+M4-T16 PASS (real TCP / temporary SQLite)
+M4-T17 PASS (real TCP / temporary SQLite)
+M4-T18 PASS (real TCP / temporary SQLite)
+M4-T19 PASS (real TCP / temporary SQLite)
+M4-T20 PASS (real TCP / temporary SQLite)
+M4-T22 PASS (real TCP / temporary SQLite)
+M4-T01/T21 NOT RUN here: independent native Qt processes / Qt Creator evidence is separate.
+T13/T15/T16 scope here: server failure/concurrency/restart only; GUI states need native evidence.
+20 passed; 0 failed; 0 not selected
+<end of output>
+Test time =  33.18 sec
+----------------------------------------------------------
+Test Passed.
+"mvp4_acceptance" end time: Oct 22 08:53 CST
+"mvp4_acceptance" time elapsed: 00:00:33
+----------------------------------------------------------
+
+12/13 Testing: mvp4_ui
+12/13 Test: mvp4_ui
+Command: "/Users/joyce/oop-project-Joyce/build/mvp4/Mvp4UiTestsDXX" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer" "/Users/joyce/oop-project-Joyce/build/mvp4/IMClient.app/Contents/MacOS/IMClient"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp4_ui" start time: Oct 22 08:53 CST
+Output:
+----------------------------------------------------------
+qt.qpa.fonts: Populating font family aliases took 52 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+qt.qpa.fonts: Populating font family aliases took 56 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25871 login= "M4UiAlice" service= "QQ"
+SMOKE OPEN pid= 25871 conversation= 3
+SMOKE SEND pid= 25871
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25871 pass= true
+qt.qpa.fonts: Populating font family aliases took 61 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25872 login= "M4UiBob" service= "QQ"
+SMOKE RECEIVE pid= 25872 message_id= 1 content= M4-QQ-private-中文😀
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25872 pass= true
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25873 login= "M4UiCarol" service= "QQ"
+SMOKE RESULT pid= 25873 pass= true
+M4-QQ-private-中文😀 PASS three independent Qt processes / TCP / real widget receive
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25874 login= "M4UiAlice" service= "WECHAT"
+This plugin does not support propagateSizeHints()
+SMOKE OPEN pid= 25874 conversation= 4
+SMOKE SEND pid= 25874
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25874 pass= true
+qt.qpa.fonts: Populating font family aliases took 57 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25875 login= "M4UiBob" service= "WECHAT"
+This plugin does not support propagateSizeHints()
+SMOKE RECEIVE pid= 25875 message_id= 2 content= M4-WECHAT-private
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25875 pass= true
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25876 login= "M4UiCarol" service= "WECHAT"
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25876 pass= true
+M4-WECHAT-private PASS three independent Qt processes / TCP / real widget receive
+qt.qpa.fonts: Populating font family aliases took 63 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25877 login= "M4UiAlice" service= "QQ"
+SMOKE OPEN pid= 25877 conversation= 1
+SMOKE SEND pid= 25877
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25877 pass= true
+qt.qpa.fonts: Populating font family aliases took 57 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25878 login= "M4UiBob" service= "QQ"
+SMOKE RECEIVE pid= 25878 message_id= 3 content= M4-QQ-group
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25878 pass= true
+qt.qpa.fonts: Populating font family aliases took 63 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25879 login= "M4UiCarol" service= "QQ"
+SMOKE RECEIVE pid= 25879 message_id= 3 content= M4-QQ-group
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25879 pass= true
+M4-QQ-group PASS three independent Qt processes / TCP / real widget receive
+qt.qpa.fonts: Populating font family aliases took 61 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25888 login= "M4UiAlice" service= "QQ"
+SMOKE OPEN pid= 25888 conversation= 2
+SMOKE SEND pid= 25888
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25888 pass= true
+qt.qpa.fonts: Populating font family aliases took 56 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25889 login= "M4UiBob" service= "QQ"
+SMOKE RECEIVE pid= 25889 message_id= 4 content= M4-QQ-subgroup
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25889 pass= true
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25890 login= "M4UiCarol" service= "QQ"
+SMOKE RESULT pid= 25890 pass= true
+M4-QQ-subgroup PASS three independent Qt processes / TCP / real widget receive
+M4 native recent50 ACK queue PASS bounded page, connection remains live,50 persisted delivery receipts
+M4 native recent conversation ordering PASS real private/group/private messages move latest conversation to row0
+M4 native unknown/identical UUID retry PASS real TCP response-loss proxy after SQLite COMMIT
+M4 native UI PASS draft/history dedup/SQL failure accurate state/async reconnect heartbeat
+<end of output>
+Test time =  31.01 sec
+----------------------------------------------------------
+Test Passed.
+"mvp4_ui" end time: Oct 22 08:54 CST
+"mvp4_ui" time elapsed: 00:00:31
+----------------------------------------------------------
+
+13/13 Testing: mvp4_receipts
+13/13 Test: mvp4_receipts
+Command: "/opt/anaconda3/bin/python3.13" "/Users/joyce/oop-project-Joyce/tests/mvp4_receipts.py" "--server" "/Users/joyce/oop-project-Joyce/build/mvp4/IMServer"
+Directory: /Users/joyce/oop-project-Joyce/build/mvp4
+"mvp4_receipts" start time: Oct 22 08:54 CST
+Output:
+----------------------------------------------------------
+MVP4 persisted delivery counts PASS: private 0/1→1/1; group 1/2; restart retains both
+<end of output>
+Test time =   1.69 sec
+----------------------------------------------------------
+Test Passed.
+"mvp4_receipts" end time: Oct 22 08:54 CST
+"mvp4_receipts" time elapsed: 00:00:01
+----------------------------------------------------------
+
+End testing: Oct 22 08:54 CST

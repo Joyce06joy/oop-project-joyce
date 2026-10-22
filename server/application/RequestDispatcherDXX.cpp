@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <regex>
 #include <iostream>
-RequestDispatcherDXX::RequestDispatcherDXX(DatabaseDXX& db):auth_(db),accounts_(db),friends_(db),recommendations_(db),mutations_(db),groups_(db) {}
+RequestDispatcherDXX::RequestDispatcherDXX(DatabaseDXX& db):auth_(db),accounts_(db),friends_(db),recommendations_(db),mutations_(db),groups_(db),messages_(db) {}
 void RequestDispatcherDXX::disconnected(std::uint64_t connection) { sessions_.erase(connection); }
 JsonDXX RequestDispatcherDXX::dispatch(std::uint64_t connection,const JsonDXX& r) {
     auto error=[&](const std::string& c,const std::string& m) { return ProtocolDXX::error(r,c,m); };
@@ -17,7 +17,8 @@ JsonDXX RequestDispatcherDXX::dispatch(std::uint64_t connection,const JsonDXX& r
         "friend.remove","friend.remark.set","friend.mutual.list","friend.recommend.same","friend.recommend.cross","friend.cross.common",
         "group.create","group.list","group.detail","group.join.apply","group.invite","group.request.list","group.request.respond",
         "group.member.kick","group.member.leave","group.admin.set","group.announcement.update","group.name.update","group.disband",
-        "group.subgroup.create","group.subgroup.list","group.subgroup.members.update","group.policy.switch"};
+        "group.subgroup.create","group.subgroup.list","group.subgroup.members.update","group.policy.switch",
+        "chat.private.open","chat.private.send","chat.group.open","chat.group.send","chat.conversation.list","chat.history.get","chat.sync","chat.message.ack"};
     if(std::find(allowed.begin(),allowed.end(),type)==allowed.end()) return error("PROTOCOL_ERROR","未知请求类型");
     std::cout<<"request "<<type<<" connection "<<connection<<std::endl;
     try {
@@ -35,6 +36,15 @@ JsonDXX RequestDispatcherDXX::dispatch(std::uint64_t connection,const JsonDXX& r
         std::vector<std::string> active;
         for(const auto& s:session["services"].items()) if(s["active"].boolean()) active.push_back(s["service_type"].text());
         const auto user=session["user_id"].integer();
+        if(type.rfind("chat.",0)==0) {
+            messages_.authorize(user,active,r);
+            if(type=="chat.private.open"||type=="chat.private.send"||type=="chat.group.send"||type=="chat.message.ack") {
+                auto result=mutations_.execute(user,r,[&] {return messages_.mutate(user,active,r);});
+                if(!result.second) publish(result.first["notifications"]);
+                return ProtocolDXX::response(r,result.first["result"]);
+            }
+            return ProtocolDXX::response(r,messages_.read(user,active,r));
+        }
         if(type.rfind("group.",0)==0) {
             groups_.authorize(user,active,r);
             if(type=="group.list"||type=="group.detail"||type=="group.request.list"||type=="group.subgroup.list") return ProtocolDXX::response(r,groups_.read(user,active,r));

@@ -69,6 +69,7 @@ FriendPageDXX::FriendPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
             {"remark", remark_->text().toStdString()}},
            [this](const JsonDXX &) { load(); });
   });
+  button("friendChat", QStringLiteral("发消息"), [this] { auto s=selected(); if(!s.isNull()&&service_!="WEIBO") emit chatRequested(QString::fromStdString(s["display_id"].text())); });
   button("friendProfile", QStringLiteral("查看资料"), [this] {
     auto s = selected();
     if (s.isNull())

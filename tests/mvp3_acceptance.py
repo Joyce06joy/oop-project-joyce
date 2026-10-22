@@ -276,7 +276,7 @@ class Acceptance:
         try:
             migrated.start()
             with sqlite3.connect(legacy) as db:
-                assert db.execute('PRAGMA user_version').fetchone()==(3,)
+                assert db.execute('PRAGMA user_version').fetchone()==(4,)
                 for table,records in snapshot.items(): assert db.execute('SELECT * FROM '+table).fetchall()==records,table
                 assert db.execute('PRAGMA foreign_key_check').fetchall()==[]
             backups=list(self.directory.glob('legacy-v2.sqlite3*v2*')); assert backups,'no pre-migration v2 backup'

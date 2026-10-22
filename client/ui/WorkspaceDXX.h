@@ -1,5 +1,6 @@
 #pragma once
 #include "RequestPanelDXX.h"
+class ChatPageDXX;
 class FriendPageDXX;
 class GroupPageDXX;
 class FriendRequestPageDXX;
@@ -27,6 +28,7 @@ private:
   RecommendationPageDXX *recommendations_;
   AccountPageDXX *accounts_;
   GroupPageDXX *groups_;
+  ChatPageDXX *chat_;
   bool active() const;
   void selectService(const QString &service);
   void refreshCurrent();

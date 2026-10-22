@@ -1,0 +1,148 @@
+qt.qpa.fonts: Populating font family aliases took 55 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25842 login= "M4UiAlice" service= "QQ"
+SMOKE OPEN pid= 25842 conversation= 3
+SMOKE SEND pid= 25842
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25842 pass= true
+qt.qpa.fonts: Populating font family aliases took 50 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25843 login= "M4UiBob" service= "QQ"
+SMOKE RECEIVE pid= 25843 message_id= 1 content= M4-QQ-private-中文😀
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25843 pass= true
+qt.qpa.fonts: Populating font family aliases took 50 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25844 login= "M4UiCarol" service= "QQ"
+SMOKE RESULT pid= 25844 pass= true
+M4-QQ-private-中文😀 PASS three independent Qt processes / TCP / real widget receive
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25852 login= "M4UiAlice" service= "WECHAT"
+This plugin does not support propagateSizeHints()
+SMOKE OPEN pid= 25852 conversation= 4
+SMOKE SEND pid= 25852
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25852 pass= true
+qt.qpa.fonts: Populating font family aliases took 63 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25853 login= "M4UiBob" service= "WECHAT"
+This plugin does not support propagateSizeHints()
+SMOKE RECEIVE pid= 25853 message_id= 2 content= M4-WECHAT-private
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25853 pass= true
+qt.qpa.fonts: Populating font family aliases took 59 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25854 login= "M4UiCarol" service= "WECHAT"
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25854 pass= true
+M4-WECHAT-private PASS three independent Qt processes / TCP / real widget receive
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of mqt.qpa.fonts: Populating font family aliases took 53 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+issing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25858 login= "M4UiAlice" service= "QQ"
+SMOKE OPEN pid= 25858 conversation= 1
+SMOKE SEND pid= 25858
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25858 pass= true
+qt.qpa.fonts: Populating font family aliases took 63 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25859 login= "M4UiBob" service= "QQ"
+SMOKE RECEIVE pid= 25859 message_id= 3 content= M4-QQ-group
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25859 pass= true
+qt.qpa.fonts: Populating font family aliases took 57 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25860 login= "M4UiCarol" service= "QQ"
+SMOKE RECEIVE pid= 25860 message_id= 3 content= M4-QQ-group
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25860 pass= true
+M4-QQ-group PASS three independent Qt processes / TCP / real widget receive
+qt.qpa.fonts: Populating font family aliases took 62 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25868 login= "M4UiAlice" service= "QQ"
+SMOKE OPEN pid= 25868 conversation= 2
+SMOKE SEND pid= 25868
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25868 pass= true
+qt.qpa.fonts: Populating font family aliases took 57 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25869 login= "M4UiBob" service= "QQ"
+SMOKE RECEIVE pid= 25869 message_id= 4 content= M4-QQ-subgroup
+This plugin does not support propagateSizeHints()
+SMOKE RESULT pid= 25869 pass= true
+qt.qpa.fonts: Populating font family aliases took 63 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+SMOKE READY pid= 25870 login= "M4UiCarol" service= "QQ"
+SMOKE RESULT pid= 25870 pass= true
+M4-QQ-subgroup PASS three independent Qt processes / TCP / real widget receive
+M4 native recent50 ACK queue PASS bounded page, connection remains live,50 persisted delivery receipts
+M4 native recent conversation ordering PASS real private/group/private messages move latest conversation to row0
+M4 native unknown/identical UUID retry PASS real TCP response-loss proxy after SQLite COMMIT
+M4 native UI PASS draft/history dedup/SQL failure accurate state/async reconnect heartbeat

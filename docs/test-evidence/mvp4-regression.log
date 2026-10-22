@@ -1,0 +1,56 @@
+Internal ctest changing into directory: /Users/joyce/oop-project-Joyce/build/mvp4
+Test project /Users/joyce/oop-project-Joyce/build/mvp4
+    Start 1: protocol
+1/9 Test #1: protocol .........................   Passed    0.38 sec
+    Start 2: acceptance
+2/9 Test #2: acceptance .......................   Passed    1.62 sec
+    Start 3: client_ui
+3/9 Test #3: client_ui ........................   Passed   18.12 sec
+    Start 4: mvp2_acceptance
+4/9 Test #4: mvp2_acceptance ..................   Passed   17.25 sec
+    Start 5: mvp2_ui
+5/9 Test #5: mvp2_ui ..........................***Failed   12.42 sec
+qt.qpa.fonts: Populating font family aliases took 52 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+FAIL: target-platform pending
+
+    Start 6: group_policy
+6/9 Test #6: group_policy .....................   Passed    0.40 sec
+    Start 7: group_database
+7/9 Test #7: group_database ...................   Passed    0.04 sec
+    Start 8: mvp3_acceptance
+8/9 Test #8: mvp3_acceptance ..................   Passed   24.54 sec
+    Start 9: mvp3_ui
+9/9 Test #9: mvp3_ui ..........................   Passed    4.66 sec
+
+89% tests passed, 1 tests failed out of 9
+
+Total Test time (real) =  79.44 sec
+
+The following tests FAILED:
+	  5 - mvp2_ui (Failed)
+Errors while running CTest

@@ -8,7 +8,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 LoginWindowDXX::LoginWindowDXX(quint16 port,QWidget* parent):QMainWindow(parent),client_(port,this) {
-    setObjectName("loginWindow"); setWindowTitle(QStringLiteral("IMPlatform · MVP 2")); resize(900,860);
+    setObjectName("loginWindow"); setWindowTitle(QStringLiteral("IMPlatform · MVP 4")); resize(900,860);
     auto* center=new QWidget; setCentralWidget(center); auto* root=new QVBoxLayout(center); root->setContentsMargins(28,24,28,24); root->setSpacing(14);
     auto* title=new QLabel(QStringLiteral("IMPlatform")); title->setStyleSheet("font-size: 28px; font-weight: 600;"); root->addWidget(title);
     status_=new QLabel(QStringLiteral("连接中…")); status_->setObjectName("connectionStatus"); status_->setWordWrap(true); root->addWidget(status_);
@@ -37,6 +37,7 @@ LoginWindowDXX::LoginWindowDXX(quint16 port,QWidget* parent):QMainWindow(parent)
         if(!r["success"].boolean()) { message_->setText(QString::fromStdString(r["error"]["message"].text())); return; }
         services_->showAccount(r["data"]); pages_->setCurrentIndex(1); message_->clear(); password_->clear();
     });
+    connect(&client_,&TcpClientDXX::sessionRestored,this,[this](const JsonDXX &account) {services_->showAccount(account);pages_->setCurrentIndex(1);});
     connect(services_,&ServiceSelectWindowDXX::loggedOut,this,[this] { pages_->setCurrentIndex(0); password_->clear(); });
     client_.connectServer();
 }

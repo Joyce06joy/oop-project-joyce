@@ -1,0 +1,7 @@
+Alice {'QQ': '10001', 'WECHAT': 'WX8001', 'WEIBO': '10001'}
+Bob {'QQ': '10002', 'WECHAT': 'WX8002', 'WEIBO': '10002'}
+Carol {'QQ': '10003', 'WECHAT': 'WX8003', 'WEIBO': '10003'}
+Demo-only password: Mvp4-Pass-2026!
+QQ group 1 WECHAT group 2 QQ subgroup 1
+Carol cannot read QQ subgroup; Alice/Bob/Carol share both main groups. Alice and Bob are QQ/WECHAT friends.
+Seeded real TCP messages: 9. No read receipts. Database: /Users/joyce/oop-project-Joyce/data/mvp4-demo.sqlite3

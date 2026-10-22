@@ -1,0 +1,7 @@
+mvp1-demo schema 1 users 3 check ok fk []
+manual schema 1 users 0 check ok fk []
+mvp2-demo schema 2 users 5 check ok fk []
+mvp3-demo schema 3 users 4 check ok fk []
+mvp4-demo schema 4 users 3 check ok fk []
+Second seed exit: 1 MVP4 demo exists. Stop its server and explicitly use --reset to replace only this demo.
+MVP4 demo not overwritten: PASS

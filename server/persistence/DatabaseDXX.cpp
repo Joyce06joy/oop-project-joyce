@@ -3,6 +3,7 @@
 #include "SchemaDXX.h"
 #include "MigrationDXX.h"
 #include "MigrationV3DXX.h"
+#include "MigrationV4DXX.h"
 #include <iostream>
 #include <fcntl.h>
 #include <sys/file.h>
@@ -20,15 +21,19 @@ DatabaseDXX::DatabaseDXX(const std::string& path) {
         if(version==0) {
             if(!query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").empty()) throw std::runtime_error("refusing unknown nonempty database");
             exec(SchemaDXX);
-        } else if(version!=1&&version!=2&&version!=3) throw std::runtime_error("unsupported database schema version");
+        } else if(version!=1&&version!=2&&version!=3&&version!=4) throw std::runtime_error("unsupported database schema version");
         if(query("PRAGMA quick_check").at(0)["quick_check"].text()!="ok"||!query("PRAGMA foreign_key_check").empty()) throw std::runtime_error("database integrity check failed");
-        if(version>0&&version<3) backupBeforeMigration(path,static_cast<int>(version));
+        if(version>0&&version<4) backupBeforeMigration(path,static_cast<int>(version));
         if(version<2) {
             try { exec(MigrationV2DXX); }
             catch(...) { try { exec("ROLLBACK"); } catch(...) {} throw; }
         }
         if(version<3) {
             try { exec(MigrationV3DXX); }
+            catch(...) { try { exec("ROLLBACK"); } catch(...) {} throw; }
+        }
+        if(version<4) {
+            try { exec(MigrationV4DXX); }
             catch(...) { try { exec("ROLLBACK"); } catch(...) {} throw; }
         }
         if(!query("PRAGMA foreign_key_check").empty()) throw std::runtime_error("migration foreign key check failed");
@@ -64,6 +69,6 @@ void DatabaseDXX::backupBeforeMigration(const std::string& path,int version) {
           if(check.rows().at(0)["quick_check"].text()!="ok") throw std::runtime_error("migration backup integrity failed"); }
 
         sqlite3_close(copy); copy=nullptr;
-        std::cout<<"schema v"<<version<<" backup verified; migrating to v3"<<std::endl;
+        std::cout<<"schema v"<<version<<" backup verified; migrating to v4"<<std::endl;
     } catch(...) { sqlite3_close(copy); throw; }
 }

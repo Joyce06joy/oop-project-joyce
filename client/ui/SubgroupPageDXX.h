@@ -11,6 +11,8 @@ public:
   void setGroup(qint64 id, bool enabled, bool canCreate);
   void refresh();
   void clearGroup();
+signals:
+  void chatRequested(qint64 group,qint64 subgroup);
 private:
   qint64 group_ = 0, subgroup_ = 0;
   bool enabled_ = false, create_ = false;

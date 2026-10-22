@@ -271,7 +271,7 @@ class Acceptance:
         try:
             server.start()
             with sqlite3.connect(legacy) as db:
-                assert db.execute('PRAGMA user_version').fetchone()[0]==3
+                assert db.execute('PRAGMA user_version').fetchone()[0]==4
                 for table,records in snapshot.items(): assert db.execute('SELECT * FROM '+table).fetchall()==records,table
                 assert db.execute('PRAGMA foreign_key_check').fetchall()==[]
             backups=list(self.directory.glob('legacy-v1.sqlite3*v1*'))

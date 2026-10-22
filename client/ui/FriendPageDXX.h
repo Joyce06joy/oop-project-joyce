@@ -9,6 +9,8 @@ public:
   void setService(const QString &service);
   void refresh();
 
+signals:
+  void chatRequested(const QString &target);
 private:
   QString service_ = "QQ", cursor_, next_;
   bool searching_ = false;

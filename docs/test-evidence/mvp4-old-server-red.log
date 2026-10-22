@@ -1,0 +1,5 @@
+Old binary: build/mvp3/IMServer
+Disposable temporary database; real localhost TCP; authenticated/activated QQ session.
+Request: chat.conversation.list {service_type: QQ}
+Response: {kind: response, type: chat.conversation.list, request_id: ae6b6942-92bc-4a08-a095-181be7d242b4, success: false, data: null, error: {code: PROTOCOL_ERROR, message: 未知请求类型}}
+RED confirmed: baseline server has no chat API.
