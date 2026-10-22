@@ -1,4 +1,5 @@
 #include "LoginWindowDXX.h"
+#include "ThemeDXX.h"
 #include "ChatPageDXX.h"
 #include <QApplication>
 #include <QCommandLineParser>
@@ -9,7 +10,7 @@
 #include <QTimer>
 #include <QDebug>
 int main(int argc,char** argv) {
- QApplication app(argc,argv);app.setApplicationName("IMClient");
+ QApplication app(argc,argv);app.setApplicationName("IMClient");ThemeDXX::apply();
  QCommandLineParser parser;parser.addHelpOption();parser.addOption({"port","本机服务器端口","port","8888"});
  parser.addOption({"chat-smoke","Run asynchronous native chat smoke driver"});
  for(const auto *key:{"smoke-login","smoke-password","smoke-target","smoke-text","smoke-expect","smoke-group","smoke-subgroup","smoke-screenshot"})parser.addOption({key,key,"value"});

@@ -33,11 +33,13 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
     accounts_->refresh();
   });
   auto *root = new QHBoxLayout(body);
-  auto *sidebar = new QVBoxLayout;
-  root->addLayout(sidebar);
+  root->setContentsMargins(0,0,0,0); root->setSpacing(12);
+  auto *sidebarWidget = new QWidget; sidebarWidget->setObjectName("serviceSidebar"); sidebarWidget->setFixedWidth(124);
+  auto *sidebar = new QVBoxLayout(sidebarWidget); sidebar->setContentsMargins(8,12,8,12);
+  root->addWidget(sidebarWidget);
   for (const auto *s : {"QQ", "WECHAT", "WEIBO"}) {
     auto *b = new QPushButton(QString::fromLatin1(s));
-    b->setObjectName(QString("space") + s);
+    b->setObjectName(QString("space") + s); b->setProperty("role","navigation"); b->setCheckable(true);
     sidebar->addWidget(b);
     connect(b, &QPushButton::clicked, this, [this, s] { selectService(s); });
   }
@@ -50,7 +52,7 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   content->addWidget(gate_);
   tabs_ = new QTabWidget;
   tabs_->setObjectName("workspaceTabs");
-  content->addWidget(tabs_);
+  content->addWidget(tabs_,1);
   friends_ = new FriendPageDXX(c);
   requests_ = new FriendRequestPageDXX(c);
   recommendations_ = new RecommendationPageDXX(c);
@@ -116,6 +118,7 @@ void WorkspaceDXX::showAccount(const JsonDXX &a) {
                     static_cast<RequestPanelDXX *>(accounts_)})
       p->resetForUser(user);
     groups_->resetGroupUser(user);
+    friends_->resetView();
     recommendations_->setService(service_);
     for (auto *field : findChildren<QLineEdit *>())
       field->clear();
@@ -147,6 +150,10 @@ void WorkspaceDXX::selectService(const QString &s) {
 }
 void WorkspaceDXX::refreshCurrent() {
   bool enabled = active();
+  bool opened = false;
+  for(const auto &s:services_.items()) if(s["service_type"].text()==service_.toStdString()) opened=true;
+  for(const auto *s:{"QQ","WECHAT","WEIBO"}) findChild<QPushButton*>(QString("space")+s)->setChecked(service_==s);
+  setProperty("currentService", service_);
   tabs_->setTabVisible(4, service_ != "WEIBO");
   tabs_->setTabVisible(5, service_ != "WEIBO");
   QString display;
@@ -156,11 +163,10 @@ void WorkspaceDXX::refreshCurrent() {
   friends_->setEnabled(enabled);
   requests_->setEnabled(enabled);
   recommendations_->setEnabled(enabled);
-  gate_->setText(enabled ? QStringLiteral("%1 · 已激活").arg(service_)
-                         : QStringLiteral("%1 "
-                                          "未开通或尚未激活。请在账号页开通，再"
-                                          "点击上方对应服务确认激活。")
-                               .arg(service_));
+  gate_->setText(enabled ? QStringLiteral("%1 · %2 · 已激活").arg(service_,display)
+                         : opened ? QStringLiteral("%1 已开通，尚未激活。点击上方对应服务确认登录；账号页可查看开通与绑定状态。").arg(service_)
+                                  : QStringLiteral("%1 尚未开通。请进入「账号」页，选择此服务并确认开通，再点击上方服务激活。").arg(service_));
+  gate_->setProperty("state",enabled?"active":opened?"inactive":"unopened");
   if (user_.isEmpty())
     return;
   if (tabs_->currentWidget() == accounts_)

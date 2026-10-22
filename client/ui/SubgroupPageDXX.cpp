@@ -9,6 +9,7 @@
 SubgroupPageDXX::SubgroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   setObjectName("subgroupsPage");
   auto *l = new QVBoxLayout(body);
+  enableBodyScrolling();
   summary_ = new QLabel;
   summary_->setObjectName("subgroupSummary");
   summary_->setWordWrap(true);
@@ -38,8 +39,8 @@ SubgroupPageDXX::SubgroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   button("subgroupChat", QStringLiteral("进入子群聊天"), [this] { if(enabled_&&subgroup_)emit chatRequested(group_,subgroup_); });
   button("subgroupRefresh", QStringLiteral("刷新"), [this] { refresh(); });
   button("subgroupNext", QStringLiteral("下一页子群"), [this] { if (!next_.isEmpty()) { cursor_ = next_; load(); } });
-  groups_ = new QListWidget; groups_->setObjectName("subgroupResults"); l->addWidget(groups_);
-  members_ = new QListWidget; members_->setObjectName("subgroupMembers"); l->addWidget(members_);
+  groups_ = new QListWidget; groups_->setObjectName("subgroupResults"); groups_->setMinimumHeight(100); l->addWidget(groups_);
+  members_ = new QListWidget; members_->setObjectName("subgroupMembers"); members_->setMinimumHeight(100); l->addWidget(members_);
   row = new QHBoxLayout; l->addLayout(row);
   auto memberButton = [this,row](const char *id, const QString &text, auto action) {
     auto *b = new QPushButton(text); b->setObjectName(id); row->addWidget(b);
@@ -96,7 +97,7 @@ void SubgroupPageDXX::load() {
         groups_->addItem(QStringLiteral("%1 · %2 人").arg(QString::fromStdString(s["name"].text())).arg(s["member_count"].integer()));
         if (s["subgroup_pk"].integer()==selectedId) selectedRow=i;
       }
-      summary_->setText(QStringLiteral("共 %1 个临时子群").arg(d["total"].integer()));
+      summary_->setText(items_.empty()?QStringLiteral("暂无临时子群。群主或获授权成员可从父群成员创建子群。"):QStringLiteral("共 %1 个临时子群").arg(d["total"].integer()));
       if (selectedRow>=0) groups_->setCurrentRow(selectedRow);
     });
 }

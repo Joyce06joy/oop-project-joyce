@@ -8,6 +8,7 @@ public:
   explicit FriendPageDXX(TcpClientDXX &client);
   void setService(const QString &service);
   void refresh();
+  void resetView();
 
 signals:
   void chatRequested(const QString &target);

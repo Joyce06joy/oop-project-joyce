@@ -1,17 +1,21 @@
 #include "ServiceSelectWindowDXX.h"
+#include "ThemeDXX.h"
 #include "WorkspaceDXX.h"
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 ServiceSelectWindowDXX::ServiceSelectWindowDXX(TcpClientDXX& client,QWidget* parent):QWidget(parent),client_(client) {
-    setObjectName("servicePage"); auto* root=new QVBoxLayout(this);
-    profile_=new QLabel; profile_->setObjectName("accountProfile"); profile_->setTextFormat(Qt::PlainText); profile_->setWordWrap(true); root->addWidget(profile_);
-    choices_=new QWidget; list_=new QVBoxLayout(choices_); root->addWidget(choices_);
+    ThemeDXX::apply();
+    setObjectName("servicePage"); auto* root=new QVBoxLayout(this); root->setContentsMargins(0,0,0,0); root->setSpacing(8);
+    auto* accountHeader=new QHBoxLayout; root->addLayout(accountHeader);
+    profile_=new QLabel; profile_->setObjectName("accountProfile"); profile_->setTextFormat(Qt::PlainText); profile_->setWordWrap(true); accountHeader->addWidget(profile_,1);
+    choices_=new QWidget; list_=new QHBoxLayout(choices_); list_->setContentsMargins(0,0,0,0); root->addWidget(choices_);
     message_=new QLabel(QStringLiteral("请选择已开通的服务")); message_->setObjectName("serviceMessage"); message_->setWordWrap(true); root->addWidget(message_);
-    workspace_=new WorkspaceDXX(client_); root->addWidget(workspace_);
+    workspace_=new WorkspaceDXX(client_); root->addWidget(workspace_,1);
     connect(workspace_,&WorkspaceDXX::authenticationRequired,this,&ServiceSelectWindowDXX::loggedOut);
     connect(workspace_,&WorkspaceDXX::servicesChanged,this,[this](const JsonDXX& services) {account_.set("services",services);showAccount(account_);});
-    auto* logout=new QPushButton(QStringLiteral("退出登录")); logout->setObjectName("logoutButton"); root->addWidget(logout);
+    auto* logout=new QPushButton(QStringLiteral("退出登录")); logout->setObjectName("logoutButton"); accountHeader->addWidget(logout);
     connect(logout,&QPushButton::clicked,this,[this] { if(pendingId_.isEmpty()) pendingId_=client_.request("auth.logout",JsonDXX({})); });
     connect(&client_,&TcpClientDXX::responseReceived,this,[this](const JsonDXX& r) {
         if(QString::fromStdString(r["request_id"].text())!=pendingId_) return;
@@ -25,7 +29,7 @@ ServiceSelectWindowDXX::ServiceSelectWindowDXX(TcpClientDXX& client,QWidget* par
 }
 void ServiceSelectWindowDXX::showAccount(const JsonDXX& account) {
     account_=account; pendingId_.clear(); choices_->setEnabled(true);
-    profile_->setText(QStringLiteral("%1\n用户 ID：%2").arg(QString::fromStdString(account["nickname"].text()),QString::number(account["user_id"].integer())));
+    profile_->setText(QStringLiteral("%1  ·  用户 ID：%2").arg(QString::fromStdString(account["nickname"].text()),QString::number(account["user_id"].integer())));
     while(auto* item=list_->takeAt(0)) { delete item->widget(); delete item; }
     for(const auto& s:account["services"].items()) {
         const auto service=QString::fromStdString(s["service_type"].text());
@@ -33,6 +37,7 @@ void ServiceSelectWindowDXX::showAccount(const JsonDXX& account) {
         button->setObjectName("activate"+service); list_->addWidget(button);
         connect(button,&QPushButton::clicked,this,[this,service] { if(!pendingId_.isEmpty()) return; selected_=service; pendingId_=client_.request("account.service.activate",JsonDXX{{"service_type",service.toStdString()}}); if(!pendingId_.isEmpty()) choices_->setEnabled(false); });
     }
-    message_->setText(QStringLiteral("请选择已开通的服务"));
+    list_->addStretch();
+    message_->setText(QStringLiteral("上方确认服务会话 · 左侧切换工作空间"));
     workspace_->showAccount(account_);
 }

@@ -3,12 +3,14 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 FriendRequestPageDXX::FriendRequestPageDXX(TcpClientDXX &c)
     : RequestPanelDXX(c) {
   setObjectName("requestsPage");
   auto *l = new QVBoxLayout(body);
+  enableBodyScrolling();
   list_ = new QListWidget;
-  list_->setObjectName("requestResults");
+  list_->setObjectName("requestResults"); list_->setMinimumHeight(180); list_->setWordWrap(true);
   l->addWidget(list_);
   auto add = [&](const char *n, const QString &t, auto f) {
     auto *b = new QPushButton(t);
@@ -37,6 +39,11 @@ FriendRequestPageDXX::FriendRequestPageDXX(TcpClientDXX &c)
       load();
     }
   });
+  auto *actions=new QHBoxLayout;
+  for (const auto *name:{"requestsRefresh","acceptRequest","rejectRequest","requestsNext"}) {
+    auto *b=findChild<QPushButton*>(name); l->removeWidget(b); actions->addWidget(b);
+  }
+  l->addLayout(actions);
 }
 void FriendRequestPageDXX::setService(const QString &s) {
   if (mutationPending())
@@ -68,7 +75,7 @@ void FriendRequestPageDXX::load() {
               i["target_display_id"].text() + " · " +
               i["verification_message"].text() + " · PENDING"));
         status->setText(
-            QStringLiteral("待处理收发申请共 %1 项").arg(d["total"].integer()));
+            (items_.empty()?QStringLiteral("暂无待处理申请。搜索好友发送申请，或稍后刷新收到的邀请。"):QStringLiteral("待处理收发申请共 %1 项").arg(d["total"].integer())));
       });
 }
 void FriendRequestPageDXX::respond(bool accept) {

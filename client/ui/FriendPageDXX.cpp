@@ -5,9 +5,11 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 FriendPageDXX::FriendPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   setObjectName("friendsPage");
   auto *l = new QVBoxLayout(body);
+  enableBodyScrolling();
   query_ = new QLineEdit;
   query_->setObjectName("friendQuery");
   query_->setPlaceholderText(QStringLiteral("展示 ID 或昵称"));
@@ -27,7 +29,7 @@ FriendPageDXX::FriendPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
     refresh();
   });
   results_ = new QListWidget;
-  results_->setObjectName("friendResults");
+  results_->setObjectName("friendResults"); results_->setMinimumHeight(150); results_->setWordWrap(true);
   l->addWidget(results_);
   message_ = new QLineEdit;
   message_->setObjectName("verificationMessage");
@@ -112,6 +114,18 @@ FriendPageDXX::FriendPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
       load();
     }
   });
+  // Reuse the existing controls in compact, task-oriented rows.
+  while (auto *item=l->takeAt(0)) delete item;
+  auto row = [l](std::initializer_list<QWidget*> widgets) {
+    auto *r=new QHBoxLayout; r->setSpacing(8); l->addLayout(r);
+    for (auto *w:widgets) r->addWidget(w);
+  };
+  row({query_,findChild<QPushButton*>("friendSearch"),findChild<QPushButton*>("friendRefresh")});
+  l->addWidget(results_,1);
+  row({message_,findChild<QPushButton*>("sendFriendRequest")});
+  row({remark_,findChild<QPushButton*>("saveFriendRemark")});
+  row({findChild<QPushButton*>("friendChat"),findChild<QPushButton*>("friendProfile"),findChild<QPushButton*>("removeFriend"),findChild<QPushButton*>("friendNext")});
+  findChild<QPushButton*>("removeFriend")->setProperty("role","danger");
   connect(results_, &QListWidget::currentRowChanged, this, [this](int row) {
     if (row >= 0 && row < int(items_.size()))
       remark_->setText(QString::fromStdString(items_[row]["remark"].text()));
@@ -125,6 +139,7 @@ void FriendPageDXX::setService(const QString &s) {
   if (mutationPending())
     return;
   service_ = s;
+  findChild<QPushButton*>("friendChat")->setVisible(s!="WEIBO");
   items_.clear();
   results_->clear();
   refresh();
@@ -152,7 +167,11 @@ void FriendPageDXX::load() {
                " · " + i["relationship"].text()));
          status->setText(QStringLiteral("共 %1 项%2")
                              .arg(d["total"].integer())
-                             .arg(items_.empty() ? QStringLiteral(" · 暂无结果")
+                             .arg(items_.empty() ? (searching_ ? QStringLiteral(" · 未找到账号，请尝试完整展示 ID 或其他昵称") : QStringLiteral(" · 暂无好友，搜索账号后发送好友申请"))
                                                  : QString()));
        });
+}
+
+void FriendPageDXX::resetView() {
+  searching_ = false; cursor_.clear(); next_.clear(); items_.clear(); results_->clear();
 }

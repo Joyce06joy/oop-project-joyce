@@ -15,6 +15,7 @@
 GroupPageDXX::GroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   setObjectName("groupsPage");
   auto *root=new QVBoxLayout(body);
+  enableBodyScrolling();
   auto *tabs=new QTabWidget; tabs->setObjectName("groupTabs"); root->addWidget(tabs);
   auto *listPage=new QWidget; auto *list=new QVBoxLayout(listPage);
   auto field=[](const char *id,const QString &placeholder,QVBoxLayout *layout) {
@@ -35,9 +36,9 @@ GroupPageDXX::GroupPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
     mutate("group.create",{{"service_type",service_.toStdString()},{"name",name_->text().toStdString()}},
       [this](const JsonDXX &d) {group_=d["group_pk"].integer();memberCursor_.clear();refresh();});
   });
-  groups_=new QListWidget; groups_->setObjectName("groupResults"); list->addWidget(groups_);
+  groups_=new QListWidget; groups_->setObjectName("groupResults"); groups_->setMinimumHeight(150); groups_->setWordWrap(true); list->addWidget(groups_);
   tabs->addTab(listPage,QStringLiteral("群列表"));
-  auto *scroll=new QScrollArea; scroll->setWidgetResizable(true);
+  auto *scroll=new QScrollArea; scroll->setWidgetResizable(true); scroll->setObjectName("groupDetailScroll");
   auto *detailPage=new QWidget; auto *detailLayout=new QVBoxLayout(detailPage); scroll->setWidget(detailPage);
   summary_=new QLabel; summary_->setObjectName("groupSummary"); summary_->setWordWrap(true); summary_->setTextFormat(Qt::PlainText); detailLayout->addWidget(summary_);
   row=new QHBoxLayout; detailLayout->addLayout(row);
@@ -145,6 +146,8 @@ JsonDXX GroupPageDXX::selectedRequest()const{
 void GroupPageDXX::updateButtons(){
   for(auto p:std::vector<std::pair<QPushButton*,const char*>>{{apply_,"can_apply"},{invite_,"can_invite"},{save_,"can_manage_announcement"},{renameButton_,"can_rename"},{policy_,"can_switch_policy"},{disband_,"can_disband"},{leave_,"can_leave"}})
     p.first->setEnabled(group_ && permissions_[p.second].boolean());
+  const bool qq = detail_["policy_type"].text()=="QQ";
+  admin_->setVisible(qq); revoke_->setVisible(qq);
   auto m=selectedMember();
   kick_->setEnabled(group_ && m["can_kick"].boolean());
   admin_->setEnabled(group_ && permissions_["can_set_admin"].boolean() && m["can_set_admin"].boolean() && m["stored_role"].text()=="MEMBER");
@@ -163,7 +166,7 @@ void GroupPageDXX::load(){
       if(g["group_pk"].integer()==group_)row=i;
     }
     if(row>=0)groups_->setCurrentRow(row);
-    status->setText(QStringLiteral("共 %1 个群").arg(d["total"].integer()));
+    status->setText(items_.empty()?QStringLiteral("暂无群。搜索群号申请加入，或填写名称创建群。"):QStringLiteral("共 %1 个群").arg(d["total"].integer()));
   });
 }
 void GroupPageDXX::loadDetail(){

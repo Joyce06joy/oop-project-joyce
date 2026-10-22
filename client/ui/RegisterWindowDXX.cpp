@@ -1,4 +1,5 @@
 #include "RegisterWindowDXX.h"
+#include "ThemeDXX.h"
 #include <QApplication>
 #include <QClipboard>
 #include <QDateEdit>
@@ -13,18 +14,21 @@
 #include <QHBoxLayout>
 
 RegisterWindowDXX::RegisterWindowDXX(TcpClientDXX& client,QWidget* parent):QWidget(parent,Qt::Window),client_(client) {
-    setObjectName("registerWindow"); setWindowTitle(QStringLiteral("创建统一账号 · IMPlatform")); resize(480,620);
-    auto* root=new QVBoxLayout(this); auto* title=new QLabel(QStringLiteral("创建统一账号")); title->setStyleSheet("font-size: 24px; font-weight: 600;"); root->addWidget(title);
+    ThemeDXX::apply();
+    setObjectName("registerWindow"); setWindowTitle(QStringLiteral("创建统一账号 · IMPlatform")); resize(540,680); setMinimumSize(480,620);
+    auto* root=new QVBoxLayout(this); auto* title=new QLabel(QStringLiteral("创建统一账号")); title->setProperty("role","title"); root->addWidget(title);
     fields_=new QWidget; auto* form=new QFormLayout(fields_);
     auto field=[&](const char* object,const QString& label,bool secret=false) { auto* line=new QLineEdit; line->setObjectName(object); if(secret) line->setEchoMode(QLineEdit::Password); form->addRow(label,line); return line; };
     name_=field("registerName",QStringLiteral("登录名")); name_->setPlaceholderText(QStringLiteral("3–32 位英文、数字或下划线"));
     nickname_=field("registerNickname",QStringLiteral("昵称")); password_=field("registerPassword",QStringLiteral("密码"),true); password_->setPlaceholderText(QStringLiteral("8–128 字节")); confirm_=field("registerConfirm",QStringLiteral("确认密码"),true);
+    auto* showPassword=new QCheckBox(QStringLiteral("显示密码与确认密码")); showPassword->setObjectName("registerShowPassword"); form->addRow(showPassword); connect(showPassword,&QCheckBox::toggled,this,[this](bool on){password_->setEchoMode(on?QLineEdit::Normal:QLineEdit::Password); confirm_->setEchoMode(on?QLineEdit::Normal:QLineEdit::Password);});
+    QWidget::setTabOrder(name_,nickname_); QWidget::setTabOrder(nickname_,password_); QWidget::setTabOrder(password_,confirm_); QWidget::setTabOrder(confirm_,showPassword);
     hasBirthday_=new QCheckBox(QStringLiteral("填写生日（可选）")); hasBirthday_->setObjectName("hasBirthday"); form->addRow(hasBirthday_);
     birthday_=new QDateEdit(QDate(2000,1,1)); birthday_->setObjectName("registerBirthday"); birthday_->setCalendarPopup(true); birthday_->setDisplayFormat("yyyy-MM-dd"); birthday_->setDateRange(QDate(1900,1,1),QDate::currentDate()); birthday_->setEnabled(false); connect(hasBirthday_,&QCheckBox::toggled,birthday_,&QDateEdit::setEnabled); form->addRow(QStringLiteral("生日"),birthday_);
     location_=field("registerLocation",QStringLiteral("所在地（可选）"));
     auto* serviceBox=new QWidget; auto* services=new QHBoxLayout(serviceBox); qq_=new QCheckBox("QQ"); qq_->setObjectName("chooseQQ"); wechat_=new QCheckBox(QStringLiteral("微信")); wechat_->setObjectName("chooseWECHAT"); weibo_=new QCheckBox(QStringLiteral("微博")); weibo_->setObjectName("chooseWEIBO"); services->addWidget(qq_); services->addWidget(wechat_); services->addWidget(weibo_); form->addRow(QStringLiteral("开通服务"),serviceBox); root->addWidget(fields_);
-    message_=new QLabel; message_->setObjectName("registerMessage"); message_->setWordWrap(true); message_->setStyleSheet("color: #a63d26;"); root->addWidget(message_);
-    submit_=new QPushButton(QStringLiteral("注册")); submit_->setObjectName("registerSubmit"); root->addWidget(submit_); connect(submit_,&QPushButton::clicked,this,&RegisterWindowDXX::submit);
+    message_=new QLabel; message_->setObjectName("registerMessage"); message_->setWordWrap(true);  root->addWidget(message_);
+    submit_=new QPushButton(QStringLiteral("注册")); submit_->setObjectName("registerSubmit"); submit_->setProperty("role","primary"); root->addWidget(submit_); connect(submit_,&QPushButton::clicked,this,&RegisterWindowDXX::submit);
     result_=new QLabel; result_->setObjectName("registerResult"); result_->setTextFormat(Qt::PlainText); result_->setTextInteractionFlags(Qt::TextSelectableByMouse); result_->setWordWrap(true); root->addWidget(result_);
     copy_=new QPushButton(QStringLiteral("复制新账号 ID")); copy_->setEnabled(false); root->addWidget(copy_); connect(copy_,&QPushButton::clicked,this,[this] { QApplication::clipboard()->setText(result_->text()); });
     auto* close=new QPushButton(QStringLiteral("返回登录")); root->addWidget(close); connect(close,&QPushButton::clicked,this,&QWidget::hide);
@@ -55,7 +59,7 @@ void RegisterWindowDXX::submit() {
         if(password_->text()!=confirm_->text()) { message_->setText(QStringLiteral("两次密码不一致，请检查确认密码")); confirm_->setFocus(); return; }
         if(location_->text().toUtf8().size()>160) { message_->setText(QStringLiteral("所在地最多 160 字节")); location_->setFocus(); return; }
         std::vector<JsonDXX> services; if(qq_->isChecked()) services.emplace_back("QQ"); if(wechat_->isChecked()) services.emplace_back("WECHAT"); if(weibo_->isChecked()) services.emplace_back("WEIBO");
-        if(services.empty()) { message_->setText(QStringLiteral("请至少选择一种服务")); return; }
+        if(services.empty()) { message_->setText(QStringLiteral("请至少选择一种服务")); qq_->setFocus(); return; }
         payload_=JsonDXX{{"login_name",name.toStdString()},{"nickname",nickname_->text().toStdString()},{"password",password_->text().toStdString()},{"birthday",hasBirthday_->isChecked()?JsonDXX(birthday_->date().toString(Qt::ISODate).toStdString()):JsonDXX()},{"location",location_->text().isEmpty()?JsonDXX():JsonDXX(location_->text().toStdString())},{"services",JsonDXX::array(services)}};
         if(!client_.connected()) { message_->setText(QStringLiteral("请先在登录窗口重试连接服务器")); return; }
         requestId_=QUuid::createUuid().toString(QUuid::WithoutBraces);

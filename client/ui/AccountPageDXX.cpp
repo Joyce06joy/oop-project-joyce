@@ -7,13 +7,14 @@
 AccountPageDXX::AccountPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   setObjectName("accountPage");
   auto *l = new QVBoxLayout(body);
+  enableBodyScrolling();
   services_ = new QLabel;
   services_->setObjectName("servicesSummary");
-  services_->setTextFormat(Qt::PlainText);
+  services_->setTextFormat(Qt::PlainText); services_->setWordWrap(true);
   l->addWidget(services_);
   binding_ = new QLabel;
   binding_->setObjectName("bindingSummary");
-  l->addWidget(binding_);
+  binding_->setWordWrap(true); l->addWidget(binding_);
   choice_ = new QComboBox;
   choice_->setObjectName("openServiceChoice");
   choice_->addItems({"QQ", "WECHAT", "WEIBO"});
@@ -60,6 +61,7 @@ AccountPageDXX::AccountPageDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
            [this](const JsonDXX &) { refresh(); });
   });
   add("accountRefresh", QStringLiteral("刷新绑定"), [this] { refresh(); });
+  l->addStretch();
 }
 void AccountPageDXX::showServices(const JsonDXX &items) {
   QString t;

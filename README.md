@@ -1,6 +1,26 @@
-# IMPlatform — MVP 4
+# IMPlatform — MVP 5
 
 一台 Mac 上运行一个 POSIX TCP 服务端和多个 Qt 6 Widgets 客户端。在保留 MVP1 注册、密码登录、自动编号及持久化基础上，增加服务补开通、QQ/微信绑定、好友管理、共同好友与推荐、真实 Socket 事件推送。MVP3 增加 QQ/微信群、审批/邀请、角色权限、子群和运行时策略切换；MVP4 接入真实 TCP 文本单聊、群聊、QQ 子群聊天、消息历史、离线同步与接收 ACK；不包含媒体或已读。
+
+
+MVP5 在既有业务上整合单主窗口、三服务导航、统一主题、密码显隐、错误焦点、可滚动管理页、消息气泡与中文状态，并提供 macOS 部署包；服务端、SQLite 和 TCP 协议未改。主窗口默认1100×720，最小900×620。
+
+最新验证：本机 macOS26.4/Apple Silicon、Qt6.12.0 上 **14/14组测试通过（154.30秒）**；另完成部署包三个独立客户端真实通信和 Finder 自动化启动。Qt Creator 全流程人工点验、其他Mac/Intel及互联网下载公证场景未运行。当前 `.app` 为本机 ad-hoc 签名，最低系统26.4；服务端仍需开发依赖。
+
+- [MVP5 实施报告与文件清单](docs/MVP5_IMPLEMENTATION_REPORT.md)、[28项验收与原始证据](docs/MVP5_TEST_REPORT.md)
+- [界面规范](docs/MVP5_UI_SPEC.md)、[基线审计](docs/MVP5_BASELINE_AUDIT.md)
+- [Alice/Bob/Carol 三客户端演示](docs/DEMO_MVP5.md)、[macOS 打包与限制](docs/MACOS_PACKAGING.md)
+
+快速演示（完成下方构建后执行，另开三个终端各启动一次客户端）：
+
+```sh
+python3 demo/seed_mvp5.py
+./build/mvp5/IMServer --db ./data/mvp5-demo.sqlite3 --port 8895
+# 三个终端各运行：
+./build/mvp5/IMClient.app/Contents/MacOS/IMClient --port 8895
+```
+
+演示账号 Alice、Bob、Carol，专用演示密码 `Mvp5-Demo-2026!`。首次脚本遇已有演示库会拒绝覆盖；不需要重建用户库。下文历史MVP演示仍使用各自独立数据。
 
 ## 本机依赖与构建
 
@@ -19,10 +39,10 @@ brew install json-c openssl@3
 
 ```sh
 export PATH="$HOME/Qt/Tools/CMake/CMake.app/Contents/bin:$HOME/Qt/Tools/Ninja:$PATH"
-cmake -S . -B build/mvp4 -G Ninja \
+cmake -S . -B build/mvp5 -G Ninja \
   -DCMAKE_PREFIX_PATH="$HOME/Qt/6.12.0/macos" -DCMAKE_BUILD_TYPE=Debug
-cmake --build build/mvp4 --parallel 4
-ctest --test-dir build/mvp4 --output-on-failure
+cmake --build build/mvp5 --parallel 4
+ctest --test-dir build/mvp5 --output-on-failure
 ```
 
 没有 Ninja 时可去掉 `-G Ninja`，并使用新的构建目录。只构建程序可加 `-DBUILD_TESTING=OFF`。在限制回环网络的执行沙箱中，集成测试需要允许本机 TCP；不能把 PermissionError 当作产品测试通过。
@@ -32,20 +52,20 @@ ctest --test-dir build/mvp4 --output-on-failure
 1. 打开本仓库根目录 `CMakeLists.txt`，选择 **Qt 6.12.0 for macOS**（或已安装的 Qt 6 Desktop Kit），Debug 构建。
 2. 若提示找不到 json-c/OpenSSL，在 Projects → Build → CMake 中添加 `json-c_DIR=/opt/homebrew/opt/json-c/lib/cmake/json-c`、`OPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl@3`。Intel Mac 相应改成 `/usr/local/opt`。
 3. 点击 Configure/Build。此工程保留原 `oop-project-Joyce` 空窗口目标，正式程序要选择 **IMServer** 和 **IMClient**。
-4. 在 Projects → Run 选择 **IMServer**。建议参数 `--db /Users/joyce/oop-project-Joyce/data/manual.sqlite3`，先启动服务端，输出 `IMServer listening 127.0.0.1:8888` 后再启动客户端。也可使用默认数据路径。
+4. 在 Projects → Run 选择 **IMServer**。建议参数 `--db ./data/manual.sqlite3`（运行工作目录设为仓库根目录），先启动服务端，输出 `IMServer listening 127.0.0.1:8888` 后再启动客户端。也可使用默认数据路径。
 5. 切换运行目标 **IMClient** 并运行。启动三个独立实例最稳定的方式是在三个终端分别执行下列客户端命令；关闭其中一个不会停止服务器。Qt Creator 的“重复运行”设置可能会终止上次运行，因此不依赖该行为。
 6. 服务端可在终端按 Ctrl+C 正常退出。停止服务器后客户端显示连接丢失；重启后点击“重试连接”，重新登录。
 
 命令行运行：
 
 ```sh
-./build/mvp4/IMServer --db ./data/manual.sqlite3
+./build/mvp5/IMServer --db ./data/manual.sqlite3
 ```
 
 另开三个终端，每个执行一次：
 
 ```sh
-./build/mvp4/IMClient.app/Contents/MacOS/IMClient
+./build/mvp5/IMClient.app/Contents/MacOS/IMClient
 ```
 
 仅监听 `127.0.0.1`；默认端口 8888，两个程序都支持 `--port 8890` 等自选端口，必须匹配。不提供对外绑定选项。
@@ -73,7 +93,7 @@ SQLite **仅服务端打开**。不指定 `--db` 时路径是：
 
 ```sh
 python3 demo/seed_mvp2.py
-./build/mvp4/IMServer --db ./data/mvp2-demo.sqlite3
+./build/mvp5/IMServer --db ./data/mvp2-demo.sqlite3
 ```
 
 Alice、Bob、David 已有三服务，Carol 只有微信，Emily 只有 QQ；演示密码均为 `Mvp2-Pass-2026!`，仅用于本机演示。脚本使用独立临时端口通过真实 TCP 生成场景后正常停止，随后请用上面的命令启动演示服务器，再启动三个 IMClient 分别登录。
@@ -106,16 +126,16 @@ python3 demo/seed_mvp2.py --reset
 
 ## 验证与文档
 
-新增 `tests/mvp2_acceptance.py` 覆盖17项服务/迁移/推送测试，`tests/mvp2_ui_main.cpp` 覆盖真实 Qt 好友、账号与推荐流程。MVP2 阶段 `ctest` 为5组（MVP3 为9组，MVP4 当前为13组）：旧协议、旧服务、旧Qt UI、新服务、新Qt UI。新增 UI 原生运行：
+新增 `tests/mvp2_acceptance.py` 覆盖17项服务/迁移/推送测试，`tests/mvp2_ui_main.cpp` 覆盖真实 Qt 好友、账号与推荐流程。MVP2 阶段 `ctest` 为5组（MVP3 为9组，MVP4 为13组，MVP5 当前14组）：旧协议、旧服务、旧Qt UI、新服务、新Qt UI。新增 UI 原生运行：
 
 ```sh
-QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp2UiTestsDXX ./build/mvp4/IMServer
+QT_QPA_PLATFORM=cocoa ./build/mvp5/Mvp2UiTestsDXX ./build/mvp5/IMServer
 ```
 
 
 - `tests/acceptance.py`：真实 TCP/SQLite 验收，独立临时数据库；包括异常写入回滚、并发幂等、重启、非法报文及服务器存活。
 - `tests/protocol_main.cpp`：分帧/合帧、严格 UTF-8/JSON、JSON 深拷贝、异常响应大小。
-- `tests/client_ui_main.cpp`：实际 Qt Widgets 操作，注册/错误密码保留字段/服务激活、三窗口、独立进程、断线、15 秒超时及原请求重试、退出恢复。CTest 默认 offscreen；可直接运行 `QT_QPA_PLATFORM=cocoa ./build/mvp4/ClientUiTestsDXX ./build/mvp4/IMServer ./build/mvp4/IMClient.app/Contents/MacOS/IMClient` 检查 macOS 原生平台。
+- `tests/client_ui_main.cpp`：实际 Qt Widgets 操作，注册/错误密码保留字段/服务激活、三窗口、独立进程、断线、15 秒超时及原请求重试、退出恢复。CTest 默认 offscreen；可直接运行 `QT_QPA_PLATFORM=cocoa ./build/mvp5/ClientUiTestsDXX ./build/mvp5/IMServer ./build/mvp5/IMClient.app/Contents/MacOS/IMClient` 检查 macOS 原生平台。
 - [MVP2 逐项测试报告（含 MVP1 回归）](docs/MVP2_TEST_REPORT.md)
 - [MVP1 历史报告](docs/TEST_REPORT.md)
 - [MVP2 实施报告与文件变化](docs/MVP2_IMPLEMENTATION_REPORT.md)
@@ -132,9 +152,9 @@ QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp2UiTestsDXX ./build/mvp4/IMServer
 
 ```sh
 python3 demo/seed_mvp3.py
-./build/mvp4/IMServer --db ./data/mvp3-demo.sqlite3
+./build/mvp5/IMServer --db ./data/mvp3-demo.sqlite3
 # 在另外三个终端分别启动同一客户端命令
-./build/mvp4/IMClient.app/Contents/MacOS/IMClient
+./build/mvp5/IMClient.app/Contents/MacOS/IMClient
 ```
 
 演示账号 Alice、Bob、Carol、David；密码均为 `Mvp3-Pass-2026!`，只用于本机演示。QQ展示号10001–10004，微信WX8001–WX8004。两个平台各预置群号1001–1006，新建群继续分配1007起，不限制为固定六群。
@@ -151,11 +171,11 @@ python3 demo/seed_mvp3.py
 ## MVP3 验收资料
 
 ```sh
-ctest --test-dir build/mvp4 --output-on-failure
-QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp3UiTestsDXX ./build/mvp4/IMServer
+ctest --test-dir build/mvp5 --output-on-failure
+QT_QPA_PLATFORM=cocoa ./build/mvp5/Mvp3UiTestsDXX ./build/mvp5/IMServer
 ```
 
-MVP3 阶段共9组CTest（MVP4 当前13组），包含MVP1/MVP2原5组、纯C++策略、数据库约束、MVP3真实TCP和Qt群界面。Qt Creator的实际人工菜单验收状态以测试报告为准，CMake构建通过不能替代该验收。
+MVP3 阶段共9组CTest（MVP4 为13组，MVP5 当前14组），包含MVP1/MVP2原5组、纯C++策略、数据库约束、MVP3真实TCP和Qt群界面。Qt Creator的实际人工菜单验收状态以测试报告为准，CMake构建通过不能替代该验收。
 
 - [实现报告与文件清单](docs/MVP3_IMPLEMENTATION_REPORT.md)
 - [逐项测试报告及未运行项](docs/MVP3_TEST_REPORT.md)
@@ -169,9 +189,9 @@ MVP3 阶段共9组CTest（MVP4 当前13组），包含MVP1/MVP2原5组、纯C++�
 
 ```sh
 python3 demo/seed_mvp4.py
-./build/mvp4/IMServer --db ./data/mvp4-demo.sqlite3
+./build/mvp5/IMServer --db ./data/mvp4-demo.sqlite3
 # 再在三个独立终端各执行一次
-./build/mvp4/IMClient.app/Contents/MacOS/IMClient
+./build/mvp5/IMClient.app/Contents/MacOS/IMClient
 ```
 
 Alice、Bob、Carol 密码均为 `Mvp4-Pass-2026!`，QQ展示号10001/10002/10003，微信WX8001/WX8002/WX8003。Alice与Bob、Alice与Carol已在QQ/微信成为好友；QQ主群group_pk=1、微信主群group_pk=2；QQ子群subgroup_pk=1只有Alice与Bob。种子通过真实TCP保存9条含中文/emoji消息。首次运行遇已有专用库会拒绝覆盖；停止其服务器并明确需要重置时才使用 `python3 demo/seed_mvp4.py --reset`。其他MVP库、默认用户库保持不变。
@@ -191,9 +211,9 @@ Alice、Bob、Carol 密码均为 `Mvp4-Pass-2026!`，QQ展示号10001/10002/1000
 ## MVP4 交付与验收
 
 ```sh
-ctest --test-dir build/mvp4 --output-on-failure
-QT_QPA_PLATFORM=cocoa ./build/mvp4/Mvp4UiTestsDXX \
-  ./build/mvp4/IMServer ./build/mvp4/IMClient.app/Contents/MacOS/IMClient \
+ctest --test-dir build/mvp5 --output-on-failure
+QT_QPA_PLATFORM=cocoa ./build/mvp5/Mvp4UiTestsDXX \
+  ./build/mvp5/IMServer ./build/mvp5/IMClient.app/Contents/MacOS/IMClient \
   ./docs/test-evidence/mvp4-native
 ```
 

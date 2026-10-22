@@ -5,10 +5,12 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 RecommendationPageDXX::RecommendationPageDXX(TcpClientDXX &c)
     : RequestPanelDXX(c) {
   setObjectName("recommendationsPage");
   auto *l = new QVBoxLayout(body);
+  enableBodyScrolling();
   l->addWidget(
       new QLabel(QStringLiteral("来源和目标服务须手动激活；涉及微信，请先绑定 "
                                 "QQ 与微信账号。推荐仅发送申请。")));
@@ -33,7 +35,7 @@ RecommendationPageDXX::RecommendationPageDXX(TcpClientDXX &c)
       QStringLiteral("共同好友查询：输入同平台展示 ID"));
   l->addWidget(mutualTarget_);
   list_ = new QListWidget;
-  list_->setObjectName("recommendResults");
+  list_->setObjectName("recommendResults"); list_->setMinimumHeight(150); list_->setWordWrap(true);
   l->addWidget(list_);
   auto add = [&](const char *n, const QString &t, auto f) {
     auto *b = new QPushButton(t);
@@ -61,9 +63,19 @@ RecommendationPageDXX::RecommendationPageDXX(TcpClientDXX &c)
   });
   add("recommendSettings", QStringLiteral("前往账号绑定设置"),
       [this] { emit settingsRequested(); });
+  auto *services=new QHBoxLayout;
+  for (auto *box:{source_,target_,mode_}) { l->removeWidget(box); services->addWidget(box); }
+  l->insertLayout(1,services);
+  auto *actions=new QHBoxLayout;
+  for (const auto *name:{"recommendRefresh","recommendNext","recommendSend","recommendSettings"}) {
+    auto *b=findChild<QPushButton*>(name); l->removeWidget(b); actions->addWidget(b);
+  }
+  l->addLayout(actions);
+  for (auto *label:body->findChildren<QLabel*>()) label->setWordWrap(true);
 }
 void RecommendationPageDXX::setService(const QString &s) {
   source_->setCurrentText(s);
+  status->setText(QStringLiteral("选择来源与目标服务，然后点击查询。"));
   list_->clear();
   items_.clear();
 }
@@ -97,6 +109,6 @@ void RecommendationPageDXX::load() {
               i["service_type"].text() + " · " + i["display_id"].text() +
               " · " + i["nickname"].text() + " · " + i["reason"].text()) +
           QStringLiteral(" · 共同好友 %1").arg(i["mutual_count"].integer()));
-    status->setText(QStringLiteral("共 %1 项").arg(data["total"].integer()));
+    status->setText(items_.empty()?QStringLiteral("共 0 项。暂无推荐，可调整来源、目标服务或查询模式；跨服务推荐需先完成绑定。"):QStringLiteral("共 %1 项").arg(data["total"].integer()));
   });
 }

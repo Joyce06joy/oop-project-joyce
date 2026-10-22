@@ -119,14 +119,20 @@ add_library(IMClientUi STATIC
     client/ui/FriendRequestPageDXX.cpp client/ui/RecommendationPageDXX.cpp
     client/ui/AccountPageDXX.cpp client/ui/WorkspaceDXX.cpp
     client/ui/GroupPageDXX.cpp client/ui/GroupPolicyDialogDXX.cpp client/ui/SubgroupPageDXX.cpp
-    client/ui/ChatPageDXX.cpp client/ui/MessageModelDXX.cpp)
+    client/ui/ChatPageDXX.cpp client/ui/MessageModelDXX.cpp
+    client/ui/ThemeDXX.cpp client/ui/MessageBubbleDelegateDXX.cpp client/resources/ui.qrc)
 target_include_directories(IMClientUi PUBLIC client/network client/ui)
 target_link_libraries(IMClientUi PUBLIC IMProtocol Qt6::Widgets Qt6::Network)
 qt_add_executable(IMClient client/main.cpp)
 target_link_libraries(IMClient PRIVATE IMClientUi)
 set_target_properties(IMClient PROPERTIES MACOSX_BUNDLE TRUE
-    MACOSX_BUNDLE_GUI_IDENTIFIER edu.joyce.implatform.mvp1
-    MACOSX_BUNDLE_BUNDLE_NAME IMClient)
+    MACOSX_BUNDLE_GUI_IDENTIFIER edu.joyce.implatform.client
+    MACOSX_BUNDLE_BUNDLE_NAME IMPlatform
+    MACOSX_BUNDLE_BUNDLE_VERSION 0.5.0
+    MACOSX_BUNDLE_SHORT_VERSION_STRING 0.5.0
+    MACOSX_BUNDLE_ICON_FILE IMPlatform.icns)
+set_source_files_properties(client/resources/IMPlatform.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+target_sources(IMClient PRIVATE client/resources/IMPlatform.icns)
 foreach(target IMProtocol IMServerCore IMServer IMClientUi IMClient)
     target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
 endforeach()
@@ -190,4 +196,11 @@ endif()
 if(BUILD_TESTING)
     add_test(NAME mvp4_receipts COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/mvp4_receipts.py" --server $<TARGET_FILE:IMServer>)
     set_tests_properties(mvp4_receipts PROPERTIES TIMEOUT 90)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(Mvp5UiTestsDXX tests/mvp5_ui_main.cpp)
+    target_link_libraries(Mvp5UiTestsDXX PRIVATE IMClientUi Qt6::Test)
+    add_test(NAME mvp5_ui COMMAND Mvp5UiTestsDXX $<TARGET_FILE:IMServer> $<TARGET_FILE:IMClient>)
+    set_tests_properties(mvp5_ui PROPERTIES TIMEOUT 180 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

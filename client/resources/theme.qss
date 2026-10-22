@@ -1,0 +1,32 @@
+/* Shared MVP5 tokens: native system font, calm high contrast workbench. */
+QMainWindow, QDialog, QWidget#registerWindow { background: #F3F6FA; color: #172B46; }
+QWidget { color: #172B46; }
+QLabel { background: transparent; }
+QLabel[role="title"] { font-size: 22px; font-weight: 600; }
+QLabel[role="section"] { font-size: 16px; font-weight: 600; }
+QLabel[role="muted"], QLabel#pageStatus { color: #52657C; font-size: 12px; }
+QLabel#connectionStatus { color: #52657C; font-size: 12px; }
+QLabel#loginMessage, QLabel#registerMessage { color: #B53738; }
+QLabel#serviceGate { padding: 8px 12px; background: #E9EFF7; border-radius: 6px; }
+QPushButton { min-height: 26px; padding: 3px 12px; border: 1px solid #C7D2E0; border-radius: 6px; background: #FFFFFF; }
+QPushButton:hover { border-color: #2264B0; background: #F0F5FC; }
+QPushButton:pressed, QPushButton:checked { color: #FFFFFF; background: #2264B0; border-color: #2264B0; }
+QPushButton:disabled { color: #8593A5; background: #EDF1F6; border-color: #DDE4ED; }
+QPushButton[role="primary"] { color: #FFFFFF; background: #2264B0; border-color: #2264B0; }
+QPushButton[role="danger"] { color: #B53738; }
+QPushButton[role="navigation"] { text-align: left; padding: 8px 12px; }
+QLineEdit, QTextEdit, QPlainTextEdit, QDateEdit, QComboBox { min-height: 26px; padding: 3px 8px; border: 1px solid #C7D2E0; border-radius: 6px; background: #FFFFFF; selection-background-color: #2264B0; }
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QDateEdit:focus, QComboBox:focus { border: 1px solid #2264B0; }
+QListWidget, QListView { background: #FFFFFF; border: 1px solid #D8E1ED; border-radius: 6px; outline: 0; }
+QListWidget::item { padding: 8px; border-bottom: 1px solid #EFF3F8; }
+QListWidget::item:selected { background: #E0ECFC; color: #172B46; }
+QTabWidget::pane { background: #FFFFFF; border: 1px solid #D8E1ED; border-radius: 6px; }
+QTabBar::tab { padding: 7px 12px; color: #52657C; }
+QTabBar::tab:selected { color: #2264B0; background: #FFFFFF; }
+QScrollArea { border: none; background: transparent; }
+QScrollArea > QWidget > QWidget { background: #FFFFFF; }
+QScrollBar:vertical { width: 10px; background: #F3F6FA; }
+QScrollBar::handle:vertical { background: #BDCADB; border-radius: 4px; min-height: 28px; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }
+QWidget#serviceSidebar { background: #E9EFF7; border-radius: 6px; }
+QLabel#pageStatus[state="error"], QLabel#pageStatus[state="unknown"] { color: #B53738; }

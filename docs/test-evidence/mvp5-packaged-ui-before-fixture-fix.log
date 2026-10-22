@@ -1,0 +1,47 @@
+2026-10-22 14:18:56.029 Mvp4UiTestsDXX[59972:923013] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+SMOKE READY pid= 59975 login= <test account> service= "QQ"
+SMOKE OPEN pid= 59975 conversation= 3
+SMOKE SEND pid= 59975
+SMOKE RESULT pid= 59975 pass= true
+SMOKE READY pid= 59976 login= <test account> service= "QQ"
+SMOKE RECEIVE pid= 59976 message_id= 1 content= <test message redacted>
+SMOKE RESULT pid= 59976 pass= true
+2026-10-22 14:18:31.961 IMClient[59977:923103] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+SMOKE READY pid= 59977 login= <test account> service= "QQ"
+SMOKE RESULT pid= 59977 pass= true
+M4-QQ-private-中文😀 PASS three independent Qt processes / TCP / real widget receive
+SMOKE READY pid= 60009 login= <test account> service= "WECHAT"
+SMOKE OPEN pid= 60009 conversation= 4
+SMOKE SEND pid= 60009
+SMOKE RESULT pid= 60009 pass= true
+SMOKE READY pid= 60010 login= <test account> service= "WECHAT"
+SMOKE RECEIVE pid= 60010 message_id= 2 content= <test message redacted>
+SMOKE RESULT pid= 60010 pass= true
+2026-10-22 14:18:36.968 IMClient[60011:923519] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+SMOKE READY pid= 60011 login= <test account> service= "WECHAT"
+SMOKE RESULT pid= 60011 pass= true
+M4-WECHAT-private PASS three independent Qt processes / TCP / real widget receive
+SMOKE READY pid= 60047 login= <test account> service= "QQ"
+SMOKE OPEN pid= 60047 conversation= 1
+SMOKE SEND pid= 60047
+SMOKE RESULT pid= 60047 pass= true
+SMOKE READY pid= 60048 login= <test account> service= "QQ"
+SMOKE RECEIVE pid= 60048 message_id= 3 content= <test message redacted>
+SMOKE RESULT pid= 60048 pass= true
+2026-10-22 14:18:42.088 IMClient[60049:923769] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+SMOKE READY pid= 60049 login= <test account> service= "QQ"
+SMOKE RECEIVE pid= 60049 message_id= 3 content= <test message redacted>
+SMOKE RESULT pid= 60049 pass= true
+M4-QQ-group PASS three independent Qt processes / TCP / real widget receive
+2026-10-22 14:18:47.700 IMClient[60071:923994] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+SMOKE READY pid= 60071 login= <test account> service= "QQ"
+SMOKE OPEN pid= 60071 conversation= 2
+SMOKE SEND pid= 60071
+SMOKE RESULT pid= 60071 pass= true
+SMOKE READY pid= 60072 login= <test account> service= "QQ"
+SMOKE RECEIVE pid= 60072 message_id= 4 content= <test message redacted>
+SMOKE RESULT pid= 60072 pass= true
+SMOKE READY pid= 60073 login= <test account> service= "QQ"
+SMOKE RESULT pid= 60073 pass= true
+M4-QQ-subgroup PASS three independent Qt processes / TCP / real widget receive
+M4 native FAIL: history event dedup

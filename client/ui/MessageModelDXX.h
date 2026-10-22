@@ -5,6 +5,9 @@
 class MessageModelDXX : public QAbstractListModel {
  Q_OBJECT
 public:
+ enum Role { RequestIdRole=Qt::UserRole, MessageIdRole, ContentRole, SenderRole,
+             TimestampRole, StateRole, OwnMessageRole, DeliveryRole };
+ void setCurrentDisplay(const QString &display);
  explicit MessageModelDXX(QObject *parent=nullptr):QAbstractListModel(parent){}
  int rowCount(const QModelIndex &parent={}) const override;
  QVariant data(const QModelIndex &index,int role) const override;
@@ -14,5 +17,6 @@ public:
  void clear();
  const std::vector<JsonDXX>& messages()const{return rows_;}
 private:
+ QString currentDisplay_;
  std::vector<JsonDXX> rows_;
 };

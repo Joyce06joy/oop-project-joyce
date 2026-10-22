@@ -1,0 +1,9 @@
+PASS protected files byte-identical: 45 (server/database/protocol)
+data/manual.sqlite3: schema=1, users=0, quick_check=ok
+data/mvp1-demo.sqlite3: schema=1, users=3, quick_check=ok
+data/mvp2-demo.sqlite3: schema=2, users=5, quick_check=ok
+data/mvp3-demo.sqlite3: schema=3, users=4, quick_check=ok
+data/mvp4-demo.sqlite3: schema=4, users=3, quick_check=ok
+data/mvp5-demo.sqlite3: schema=4, users=3, quick_check=ok
+PASS MVP5 existing demo seed refused overwrite; database SHA256 unchanged.
+MVP5 demo exists. Stop its server and explicitly use --reset to replace only this demo.

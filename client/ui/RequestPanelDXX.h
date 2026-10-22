@@ -19,6 +19,8 @@ public:
               std::function<void(const JsonDXX &)> done);
   bool mutationPending() const;
   void resetForUser(const QString &user);
+  void enableBodyScrolling();
+  void setState(const QString &state);
   QLabel *status;
   QWidget *body;
   QVBoxLayout *layout;

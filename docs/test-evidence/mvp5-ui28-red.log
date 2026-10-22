@@ -1,0 +1,11 @@
+qt.qpa.fonts: Populating font family aliases took 50 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+This plugin does not support raise()
+UI01 PASS real refused TCP connection; GUI heartbeat
+UI02 PASS real server manual reconnect
+UI03 PASS password visibility; server error focus and account retention
+UI04/UI05 PASS empty field focus/retention; bounded date; real registered ID
+UI06 PASS single main window, inactive sessions, stable tab indices, persistent socket
+UI06/UI09/UI27 PASS QQ/WX actual friendship isolation; empty search; repeated tabs one response
+UI19/UI23 PASS real TCP message; actual QListView bubble size/wrap/render; Chinese states (mapping check)
+UI23 PASS exact900x620 and1100x720; visible bottom actions reachable
+MVP5 UI FAIL: UI28 new account own friend list

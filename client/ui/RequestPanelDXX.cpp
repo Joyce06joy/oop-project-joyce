@@ -3,6 +3,8 @@
 #include <QPushButton>
 #include <QUuid>
 #include <QVBoxLayout>
+#include <QScrollArea>
+#include <QStyle>
 namespace {
 QString readKey(const QString &type) {
   return type.startsWith("friend.") ? QStringLiteral("friend.query") : type;
@@ -11,13 +13,15 @@ QString readKey(const QString &type) {
 RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
     : QWidget(parent), client_(client) {
   layout = new QVBoxLayout(this);
+  layout->setContentsMargins(8,8,8,8); layout->setSpacing(8);
   body = new QWidget;
-  layout->addWidget(body);
+  layout->addWidget(body,1);
   status = new QLabel;
   status->setObjectName("pageStatus");
   status->setWordWrap(true);
   status->setTextFormat(Qt::PlainText);
   layout->addWidget(status);
+  setState(QStringLiteral("idle"));
   retry_ = new QPushButton(QStringLiteral("重试原操作"));
   retry_->setObjectName("retryMutation");
   retry_->hide();
@@ -29,6 +33,7 @@ RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
     if (!client_.request(std::get<0>(call), std::get<1>(call), mutationId_)
              .isEmpty()) {
       retry_->hide();
+      setState(QStringLiteral("loading"));
       status->setText(QStringLiteral("正在重试原操作…"));
     }
   });
@@ -55,6 +60,7 @@ RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
         }
         if (!r["success"].boolean()) {
           const auto code = r["error"]["code"].text();
+          setState(QStringLiteral("error"));
           status->setText(QString::fromStdString(r["error"]["message"].text()));
           if (std::get<3>(call) &&
               (code == "DATABASE_ERROR" || code == "SERVER_ERROR" ||
@@ -78,6 +84,7 @@ RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
           body->setEnabled(true);
           retry_->hide();
         }
+        setState(QStringLiteral("success"));
         status->setText(QStringLiteral("已更新"));
         std::get<2>(call)(r["data"]);
         if (std::get<3>(call))
@@ -89,6 +96,7 @@ RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
               uncertain();
             else if (calls_.contains(id)) {
               const auto type = std::get<0>(calls_.take(id));
+              setState(QStringLiteral("error"));
               status->setText(QStringLiteral("查询超时，输入已保留，请刷新。"));
               finishRead(type);
             }
@@ -96,6 +104,8 @@ RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
   connect(&client_, &TcpClientDXX::statusChanged, this,
           [this](const QString &, bool online) {
             if (!online) {
+              setState(QStringLiteral("offline"));
+              status->setText(QStringLiteral("连接已断开，输入已保留。请在顶部重试连接。"));
               readIds_.clear();
               queuedReads_.clear();
               for (const auto &id : calls_.keys())
@@ -107,6 +117,7 @@ RequestPanelDXX::RequestPanelDXX(TcpClientDXX &client, QWidget *parent)
           });
 }
 void RequestPanelDXX::uncertain() {
+  setState(QStringLiteral("unknown"));
   body->setEnabled(false);
   retry_->show();
   status->setText(QStringLiteral("操作结果尚未确认，输入已保留。请恢复连接、登"
@@ -122,6 +133,7 @@ void RequestPanelDXX::resetForUser(const QString &user) {
     body->setEnabled(true);
     retry_->hide();
     status->clear();
+    setState(QStringLiteral("idle"));
     user_ = user;
   }
 }
@@ -135,16 +147,19 @@ void RequestPanelDXX::read(const QString &type, const JsonDXX &data,
   const auto key = readKey(type);
   if (readIds_.contains(key)) {
     queuedReads_.insert(key, Call{type, data, std::move(done), false});
-    status->setText(QStringLiteral("加载中…"));
+    setState(QStringLiteral("loading"));
+  status->setText(QStringLiteral("加载中…"));
     return;
   }
   const auto id = client_.request(type, data);
   if (id.isEmpty()) {
+    setState(QStringLiteral("offline"));
     status->setText(QStringLiteral("尚未连接，输入已保留。"));
     return;
   }
   calls_.insert(id, Call{type, data, std::move(done), false});
   readIds_.insert(key, id);
+  setState(QStringLiteral("loading"));
   status->setText(QStringLiteral("加载中…"));
 }
 void RequestPanelDXX::mutate(const QString &type, const JsonDXX &data,
@@ -154,6 +169,7 @@ void RequestPanelDXX::mutate(const QString &type, const JsonDXX &data,
   mutationId_ = QUuid::createUuid().toString(QUuid::WithoutBraces);
   calls_.insert(mutationId_, Call{type, data, std::move(done), true});
   body->setEnabled(false);
+  setState(QStringLiteral("loading"));
   status->setText(QStringLiteral("处理中…"));
   if (client_.request(type, data, mutationId_).isEmpty())
     uncertain();
@@ -166,4 +182,20 @@ void RequestPanelDXX::finishRead(const QString &type) {
     const auto queued = queuedReads_.take(key);
     read(std::get<0>(queued), std::get<1>(queued), std::get<2>(queued));
   }
+}
+
+void RequestPanelDXX::setState(const QString &state) {
+  setProperty("state",state);
+  status->setProperty("state",state);
+  status->style()->unpolish(status); status->style()->polish(status);
+}
+void RequestPanelDXX::enableBodyScrolling() {
+  if (body->parentWidget() && qobject_cast<QScrollArea*>(body->parentWidget()->parentWidget())) return;
+  layout->removeWidget(body);
+  auto *scroll = new QScrollArea(this);
+  scroll->setObjectName("managementScroll");
+  scroll->setWidgetResizable(true);
+  scroll->setFrameShape(QFrame::NoFrame);
+  scroll->setWidget(body);
+  layout->insertWidget(0,scroll,1);
 }

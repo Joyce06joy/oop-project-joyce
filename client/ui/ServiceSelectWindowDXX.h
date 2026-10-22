@@ -3,7 +3,7 @@
 #include <QWidget>
 class QLabel;
 class WorkspaceDXX;
-class QVBoxLayout;
+class QHBoxLayout;
 class ServiceSelectWindowDXX : public QWidget {
     Q_OBJECT
 public:
@@ -16,7 +16,7 @@ private:
     QLabel* profile_;
     QLabel* message_;
     QWidget* choices_;
-    QVBoxLayout* list_;
+    QHBoxLayout* list_;
     QString pendingId_;
     QString selected_;
     JsonDXX account_;
