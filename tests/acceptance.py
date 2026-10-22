@@ -103,7 +103,7 @@ def main():
                 print('T11 PASS: split/coalesced/invalid length/UTF8/JSON')
                 with sqlite3.connect(db) as sql:
                     sql.execute('PRAGMA foreign_keys=ON')
-                    assert sql.execute('PRAGMA user_version').fetchone()[0]==2
+                    assert sql.execute('PRAGMA user_version').fetchone()[0]==3
                     assert sql.execute('select count(*) from users').fetchone()[0]==4
                     for statement in ["insert into accounts(user_id,service_type,display_id,status,opened_at) values(9999,'QQ','x','ACTIVE','now')", "insert into accounts(user_id,service_type,display_id,status,opened_at) select user_id,service_type,display_id,status,opened_at from accounts limit 1", "insert into users(login_name,password_hash,nickname,registered_at) values('ALICE','x','x','now')"]:
                         try: sql.execute(statement)

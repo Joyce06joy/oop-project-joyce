@@ -1,6 +1,6 @@
-# IMPlatform — MVP 2
+# IMPlatform — MVP 3
 
-一台 Mac 上运行一个 POSIX TCP 服务端和多个 Qt 6 Widgets 客户端。在保留 MVP1 注册、密码登录、自动编号及持久化基础上，增加服务补开通、QQ/微信绑定、好友管理、共同好友与推荐、真实 Socket 事件推送。本轮不包含群组或聊天。
+一台 Mac 上运行一个 POSIX TCP 服务端和多个 Qt 6 Widgets 客户端。在保留 MVP1 注册、密码登录、自动编号及持久化基础上，增加服务补开通、QQ/微信绑定、好友管理、共同好友与推荐、真实 Socket 事件推送。MVP3 增加 QQ/微信群、审批/邀请、角色权限、子群和运行时策略切换；本轮不包含聊天。
 
 ## 本机依赖与构建
 
@@ -19,10 +19,10 @@ brew install json-c openssl@3
 
 ```sh
 export PATH="$HOME/Qt/Tools/CMake/CMake.app/Contents/bin:$HOME/Qt/Tools/Ninja:$PATH"
-cmake -S . -B build/mvp2 -G Ninja \
+cmake -S . -B build/mvp3 -G Ninja \
   -DCMAKE_PREFIX_PATH="$HOME/Qt/6.12.0/macos" -DCMAKE_BUILD_TYPE=Debug
-cmake --build build/mvp2 --parallel 4
-ctest --test-dir build/mvp2 --output-on-failure
+cmake --build build/mvp3 --parallel 4
+ctest --test-dir build/mvp3 --output-on-failure
 ```
 
 没有 Ninja 时可去掉 `-G Ninja`，并使用新的构建目录。只构建程序可加 `-DBUILD_TESTING=OFF`。在限制回环网络的执行沙箱中，集成测试需要允许本机 TCP；不能把 PermissionError 当作产品测试通过。
@@ -39,13 +39,13 @@ ctest --test-dir build/mvp2 --output-on-failure
 命令行运行：
 
 ```sh
-./build/mvp2/IMServer --db ./data/manual.sqlite3
+./build/mvp3/IMServer --db ./data/manual.sqlite3
 ```
 
 另开三个终端，每个执行一次：
 
 ```sh
-./build/mvp2/IMClient.app/Contents/MacOS/IMClient
+./build/mvp3/IMClient.app/Contents/MacOS/IMClient
 ```
 
 仅监听 `127.0.0.1`；默认端口 8888，两个程序都支持 `--port 8890` 等自选端口，必须匹配。不提供对外绑定选项。
@@ -65,7 +65,7 @@ SQLite **仅服务端打开**。不指定 `--db` 时路径是：
 ~/Library/Application Support/IMPlatformMVP1/implatform.sqlite3
 ```
 
-`--db` 支持新路径并创建父目录。数据库旁的 `.lock` 文件用于进程独占；不要删除正在使用的锁文件。普通启动不清空任何用户。版本 0 的空数据库先从 `database/schema.sql` 初始化 v1，再应用 `database/migrations/002_friends.sql` 升级 v2；已有 v1 库先做 SQLite 在线备份并校验，再事务升级。备份名为原路径加 `.v1-backup.sqlite3`，已存在时追加序号，绝不覆盖。原 users、accounts、计数器和注册幂等记录不重建。未知非空库或不支持的版本仍拒绝启动；旧课设目录数据不会自动读取。
+`--db` 支持新路径并创建父目录。数据库旁的 `.lock` 文件用于进程独占；不要删除正在使用的锁文件。普通启动不清空任何用户。版本 0 的空数据库先从 `database/schema.sql` 初始化 v1，再依序应用 `002_friends.sql` 和 `003_groups.sql` 升级 v3；已有 v1/v2 库先做 SQLite 在线备份并校验，再事务升级。备份名为原路径加 `.v1-backup.sqlite3` 或 `.v2-backup.sqlite3`，已存在时追加序号，绝不覆盖。原 users、accounts、计数器和注册幂等记录不重建。未知非空库或不支持的版本仍拒绝启动；旧课设目录数据不会自动读取。
 
 ## MVP2 五用户演示与显式重置
 
@@ -73,7 +73,7 @@ SQLite **仅服务端打开**。不指定 `--db` 时路径是：
 
 ```sh
 python3 demo/seed_mvp2.py
-./build/mvp2/IMServer --db ./data/mvp2-demo.sqlite3
+./build/mvp3/IMServer --db ./data/mvp2-demo.sqlite3
 ```
 
 Alice、Bob、David 已有三服务，Carol 只有微信，Emily 只有 QQ；演示密码均为 `Mvp2-Pass-2026!`，仅用于本机演示。脚本使用独立临时端口通过真实 TCP 生成场景后正常停止，随后请用上面的命令启动演示服务器，再启动三个 IMClient 分别登录。
@@ -106,16 +106,16 @@ python3 demo/seed_mvp2.py --reset
 
 ## 验证与文档
 
-新增 `tests/mvp2_acceptance.py` 覆盖17项服务/迁移/推送测试，`tests/mvp2_ui_main.cpp` 覆盖真实 Qt 好友、账号与推荐流程。`ctest` 总计5组：旧协议、旧服务、旧Qt UI、新服务、新Qt UI。新增 UI 原生运行：
+新增 `tests/mvp2_acceptance.py` 覆盖17项服务/迁移/推送测试，`tests/mvp2_ui_main.cpp` 覆盖真实 Qt 好友、账号与推荐流程。MVP2 阶段 `ctest` 为5组（MVP3 当前为9组）：旧协议、旧服务、旧Qt UI、新服务、新Qt UI。新增 UI 原生运行：
 
 ```sh
-QT_QPA_PLATFORM=cocoa ./build/mvp2/Mvp2UiTestsDXX ./build/mvp2/IMServer
+QT_QPA_PLATFORM=cocoa ./build/mvp3/Mvp2UiTestsDXX ./build/mvp3/IMServer
 ```
 
 
 - `tests/acceptance.py`：真实 TCP/SQLite 验收，独立临时数据库；包括异常写入回滚、并发幂等、重启、非法报文及服务器存活。
 - `tests/protocol_main.cpp`：分帧/合帧、严格 UTF-8/JSON、JSON 深拷贝、异常响应大小。
-- `tests/client_ui_main.cpp`：实际 Qt Widgets 操作，注册/错误密码保留字段/服务激活、三窗口、独立进程、断线、15 秒超时及原请求重试、退出恢复。CTest 默认 offscreen；可直接运行 `QT_QPA_PLATFORM=cocoa ./build/mvp2/ClientUiTestsDXX ./build/mvp2/IMServer ./build/mvp2/IMClient.app/Contents/MacOS/IMClient` 检查 macOS 原生平台。
+- `tests/client_ui_main.cpp`：实际 Qt Widgets 操作，注册/错误密码保留字段/服务激活、三窗口、独立进程、断线、15 秒超时及原请求重试、退出恢复。CTest 默认 offscreen；可直接运行 `QT_QPA_PLATFORM=cocoa ./build/mvp3/ClientUiTestsDXX ./build/mvp3/IMServer ./build/mvp3/IMClient.app/Contents/MacOS/IMClient` 检查 macOS 原生平台。
 - [MVP2 逐项测试报告（含 MVP1 回归）](docs/MVP2_TEST_REPORT.md)
 - [MVP1 历史报告](docs/TEST_REPORT.md)
 - [MVP2 实施报告与文件变化](docs/MVP2_IMPLEMENTATION_REPORT.md)
@@ -126,3 +126,40 @@ QT_QPA_PLATFORM=cocoa ./build/mvp2/Mvp2UiTestsDXX ./build/mvp2/IMServer
 密码使用随机 16 字节盐的 PBKDF2-HMAC-SHA256（600000 轮、32 字节输出），保存算法、参数、盐及派生值。会话随机且绑定连接；不接受通过另一个连接提交 session_id 冒用登录。日志仅记录连接事件、批准的请求类型和不含字段值的错误。
 
 本地教学流量经回环 TCP 明文传递；本工程不提供公网安全部署能力。服务端串行数据库工作线程也执行密码 KDF，小规模演示请求可能排队；网络与 Qt GUI 事件循环独立，避免阻塞界面。
+
+
+## MVP3 群组演示
+
+```sh
+python3 demo/seed_mvp3.py
+./build/mvp3/IMServer --db ./data/mvp3-demo.sqlite3
+# 在另外三个终端分别启动同一客户端命令
+./build/mvp3/IMClient.app/Contents/MacOS/IMClient
+```
+
+演示账号 Alice、Bob、Carol、David；密码均为 `Mvp3-Pass-2026!`，只用于本机演示。QQ展示号10001–10004，微信WX8001–WX8004。两个平台各预置群号1001–1006，新建群继续分配1007起，不限制为固定六群。
+
+1. 三个客户端分别登录Alice/Bob/Carol，点击上方QQ激活，左侧QQ空间选择“群组”。查询1001并选择结果，再进入“详情与成员”。Alice群主、Bob管理员、Carol普通成员；临时子群包括Alice与Carol。
+2. Alice/Bob在“申请与邀请”查看David待处理申请，可接受或拒绝。第四个客户端David也可在另一群申请。审批后成员与请求通过Socket刷新。
+3. Bob可维护公告、审批、踢普通成员，不能设管理员或踢群主/其他管理员；Alice可设/撤管理员、改群名。Carol无管理特权。踢人/退出均清理该成员所属子群关系。群主不能直接退出，可二次确认解散。
+4. Alice选择“切换群管理模式…”，阅读成员/原属服务不变、管理员与子群暂停、待决请求取消的影响，确定后再次确认。QQ原群切微信规则后Bob管理按钮禁用，旧stored ADMIN保留；子群不可见/操作；成员仍为原QQ账号。切回QQ后角色权限与原子群恢复，已取消请求不复活。
+5. 激活微信、切换微信空间，查询1004。Alice群主、Bob普通成员；Carol有Bob发出的待确认邀请。Carol本人接受/拒绝；邀请者不能代确认。Bob能邀请，却不能维护公告/踢人/设管理员/建子群；直接申请被服务器拒绝。
+6. 群组页支持搜索、仅我加入、分页、详情、成员、请求、子群成员增删。微博空间隐藏群组入口。断线未知结果保留原操作，重连登录同一用户并激活原服务后重试；失败不认定成功。数据从服务器查询，重启仍保留策略/角色/子群。
+
+仅明确需要重置专用演示库且已停止其服务器时使用 `python3 demo/seed_mvp3.py --reset`；不会覆盖其他MVP库或默认用户库。初次运行发现已有库会拒绝覆盖。已有真实库由服务器自动备份迁移；恢复说明见数据库文档。
+
+## MVP3 验收资料
+
+```sh
+ctest --test-dir build/mvp3 --output-on-failure
+QT_QPA_PLATFORM=cocoa ./build/mvp3/Mvp3UiTestsDXX ./build/mvp3/IMServer
+```
+
+当前共9组CTest，包含MVP1/MVP2原5组、纯C++策略、数据库约束、MVP3真实TCP和Qt群界面。Qt Creator的实际人工菜单验收状态以测试报告为准，CMake构建通过不能替代该验收。
+
+- [实现报告与文件清单](docs/MVP3_IMPLEMENTATION_REPORT.md)
+- [逐项测试报告及未运行项](docs/MVP3_TEST_REPORT.md)
+- [群组协议与推送](docs/PROTOCOL_V3.md)
+- [数据库迁移、ER及恢复](docs/DB_SCHEMA_V3.md)
+- [动态多态UML及事务时序](docs/UML_GROUP_POLICY.md)
+- [基线审计](docs/MVP3_AUDIT.md)、[原始任务书](docs/MVP3_WORK_SPEC.md)

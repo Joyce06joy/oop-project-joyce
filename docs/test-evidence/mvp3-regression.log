@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /Users/joyce/oop-project-Joyce/build/mvp3
+Test project /Users/joyce/oop-project-Joyce/build/mvp3
+    Start 1: protocol
+1/7 Test #1: protocol .........................   Passed    0.58 sec
+    Start 2: acceptance
+2/7 Test #2: acceptance .......................   Passed    1.73 sec
+    Start 3: client_ui
+3/7 Test #3: client_ui ........................   Passed   18.16 sec
+    Start 4: mvp2_acceptance
+4/7 Test #4: mvp2_acceptance ..................   Passed   16.90 sec
+    Start 5: mvp2_ui
+5/7 Test #5: mvp2_ui ..........................   Passed   20.40 sec
+    Start 6: group_policy
+6/7 Test #6: group_policy .....................   Passed    0.55 sec
+    Start 7: group_database
+7/7 Test #7: group_database ...................   Passed    0.06 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =  58.38 sec

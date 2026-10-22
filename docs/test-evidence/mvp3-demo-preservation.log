@@ -1,0 +1,3 @@
+Second run exit: 1
+MVP3 demo exists. Stop its server and explicitly use --reset to replace only this demo.
+Demo unchanged: True

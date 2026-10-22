@@ -1,0 +1,10 @@
+Alice {'QQ': '10001', 'WECHAT': 'WX8001', 'WEIBO': '10001'}
+Bob {'QQ': '10002', 'WECHAT': 'WX8002', 'WEIBO': '10002'}
+Carol {'QQ': '10003', 'WECHAT': 'WX8003', 'WEIBO': '10003'}
+David {'QQ': '10004', 'WECHAT': 'WX8004', 'WEIBO': '10004'}
+Demo-only password: Mvp3-Pass-2026!
+QQ group 1001: 1 Alice OWNER / Bob ADMIN / Carol MEMBER; child: 1
+WECHAT group 1004: 10 Alice OWNER / Bob MEMBER; Carol invitation: 4
+David QQ pending apply: 5 policy switching cancels it without removing members/roles/subgroup.
+Both platforms have explicit demo numbers 1001–1006; normal startup never resets them.
+Database: /Users/joyce/oop-project-Joyce/data/mvp3-demo.sqlite3

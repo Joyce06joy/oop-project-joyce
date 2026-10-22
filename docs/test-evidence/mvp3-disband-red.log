@@ -1,0 +1,16 @@
+M3-T10 FAIL: TimeoutError: timed out
+Traceback (most recent call last):
+  File "/Users/joyce/oop-project-Joyce/tests/mvp3_acceptance.py", line 306, in main
+    server.start(); Acceptance(server,directory).__getattribute__('test%02d'%number)()
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/joyce/oop-project-Joyce/tests/mvp3_acceptance.py", line 141, in test10
+    event=outsider.event('group.disbanded',mark); no_private(event)
+  File "/Users/joyce/oop-project-Joyce/tests/mvp2_helpers.py", line 50, in event
+    self.receive(max(.001, deadline-time.monotonic()))
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joyce/oop-project-Joyce/tests/mvp2_helpers.py", line 24, in receive
+    block = self.socket.recv(65536)
+TimeoutError: timed out
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+0 passed; 1 failed; 20 not selected

@@ -1,0 +1,64 @@
+Internal ctest changing into directory: /Users/joyce/oop-project-Joyce/build/mvp3
+Test project /Users/joyce/oop-project-Joyce/build/mvp3
+    Start 1: protocol
+1/9 Test #1: protocol .........................   Passed    0.00 sec
+    Start 2: acceptance
+2/9 Test #2: acceptance .......................   Passed    1.71 sec
+    Start 3: client_ui
+3/9 Test #3: client_ui ........................   Passed   18.09 sec
+    Start 4: mvp2_acceptance
+4/9 Test #4: mvp2_acceptance ..................   Passed   16.99 sec
+    Start 5: mvp2_ui
+5/9 Test #5: mvp2_ui ..........................   Passed   20.05 sec
+    Start 6: group_policy
+6/9 Test #6: group_policy .....................   Passed    0.01 sec
+    Start 7: group_database
+7/9 Test #7: group_database ...................   Passed    0.06 sec
+    Start 8: mvp3_acceptance
+8/9 Test #8: mvp3_acceptance ..................***Failed   24.31 sec
+M3-T01 PASS
+M3-T02 PASS
+M3-T03 PASS
+M3-T04 PASS
+M3-T05 PASS
+M3-T06 PASS
+M3-T07 PASS
+M3-T08 PASS
+M3-T09 PASS
+M3-T10 PASS
+M3-T11 PASS
+M3-T12 PASS
+M3-T13 PASS
+M3-T14 PASS
+M3-T15 PASS
+M3-T16 PASS
+M3-T17 FAIL: AssertionError: {'kind': 'response', 'type': 'group.member.kick', 'request_id': '682b7ab4-e436-49d7-a72e-b9a97ecde780', 'success': False, 'data': None, 'error': {'code': 'GROUP_INVALID_TARGET', 'message': '目标不是群成员'}}
+Traceback (most recent call last):
+  File "/Users/joyce/oop-project-Joyce/tests/mvp3_acceptance.py", line 306, in main
+    server.start(); Acceptance(server,directory).__getattribute__('test%02d'%number)()
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/joyce/oop-project-Joyce/tests/mvp3_acceptance.py", line 207, in test17
+    self.denied(b,'group.member.kick',dict(group_pk=g,target_display_id=ci['QQ']))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joyce/oop-project-Joyce/tests/mvp3_acceptance.py", line 55, in denied
+    assert not response['success'] and response['error']['code'] in codes,response
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'kind': 'response', 'type': 'group.member.kick', 'request_id': '682b7ab4-e436-49d7-a72e-b9a97ecde780', 'success': False, 'data': None, 'error': {'code': 'GROUP_INVALID_TARGET', 'message': '目标不是群成员'}}
+M3-T18 PASS
+M3-T19 PASS
+M3-T20 PASS
+M3-T21 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+20 passed; 1 failed; 0 not selected
+
+    Start 9: mvp3_ui
+9/9 Test #9: mvp3_ui ..........................   Passed    4.87 sec
+
+89% tests passed, 1 tests failed out of 9
+
+Total Test time (real) =  86.10 sec
+
+The following tests FAILED:
+	  8 - mvp3_acceptance (Failed)
+Errors while running CTest

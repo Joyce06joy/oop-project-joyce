@@ -32,3 +32,6 @@ data/
 __pycache__/
 *.pyc
 deliverables/
+
+# Reviewable MVP3 test evidence (other runtime logs stay ignored)
+!docs/test-evidence/*.log

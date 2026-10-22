@@ -2,6 +2,7 @@
 #include "StatementDXX.h"
 #include "SchemaDXX.h"
 #include "MigrationDXX.h"
+#include "MigrationV3DXX.h"
 #include <iostream>
 #include <fcntl.h>
 #include <sys/file.h>
@@ -19,11 +20,15 @@ DatabaseDXX::DatabaseDXX(const std::string& path) {
         if(version==0) {
             if(!query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").empty()) throw std::runtime_error("refusing unknown nonempty database");
             exec(SchemaDXX);
-        } else if(version!=1&&version!=2) throw std::runtime_error("unsupported database schema version");
+        } else if(version!=1&&version!=2&&version!=3) throw std::runtime_error("unsupported database schema version");
         if(query("PRAGMA quick_check").at(0)["quick_check"].text()!="ok"||!query("PRAGMA foreign_key_check").empty()) throw std::runtime_error("database integrity check failed");
+        if(version>0&&version<3) backupBeforeMigration(path,static_cast<int>(version));
         if(version<2) {
-            if(version==1) backupBeforeMigration(path);
             try { exec(MigrationV2DXX); }
+            catch(...) { try { exec("ROLLBACK"); } catch(...) {} throw; }
+        }
+        if(version<3) {
+            try { exec(MigrationV3DXX); }
             catch(...) { try { exec("ROLLBACK"); } catch(...) {} throw; }
         }
         if(!query("PRAGMA foreign_key_check").empty()) throw std::runtime_error("migration foreign key check failed");
@@ -37,12 +42,12 @@ void DatabaseDXX::exec(const std::string& sql) { if(sqlite3_exec(db_,sql.c_str()
 std::vector<JsonDXX> DatabaseDXX::query(const std::string& sql,const std::vector<JsonDXX>& params) { StatementDXX statement(db_,sql,params); return statement.rows(); }
 std::int64_t DatabaseDXX::insertedId() const { return sqlite3_last_insert_rowid(db_); }
 
-void DatabaseDXX::backupBeforeMigration(const std::string& path) {
+void DatabaseDXX::backupBeforeMigration(const std::string& path,int version) {
     // SQLite backup includes committed WAL contents. Never overwrite a prior backup.
-    std::string backupPath=path+".v1-backup.sqlite3";
+    std::string backupPath=path+".v"+std::to_string(version)+"-backup.sqlite3";
     int fd=-1;
     for(int suffix=0;suffix<1000;++suffix) {
-        backupPath=path+".v1-backup"+(suffix?"-"+std::to_string(suffix):std::string())+".sqlite3";
+        backupPath=path+".v"+std::to_string(version)+"-backup"+(suffix?"-"+std::to_string(suffix):std::string())+".sqlite3";
         fd=open(backupPath.c_str(),O_CREAT|O_EXCL|O_RDWR,0600);
         if(fd>=0) break;
         if(errno!=EEXIST) throw std::runtime_error("cannot create migration backup");
@@ -59,6 +64,6 @@ void DatabaseDXX::backupBeforeMigration(const std::string& path) {
           if(check.rows().at(0)["quick_check"].text()!="ok") throw std::runtime_error("migration backup integrity failed"); }
 
         sqlite3_close(copy); copy=nullptr;
-        std::cout<<"schema v1 backup verified; migrating to v2"<<std::endl;
+        std::cout<<"schema v"<<version<<" backup verified; migrating to v3"<<std::endl;
     } catch(...) { sqlite3_close(copy); throw; }
 }

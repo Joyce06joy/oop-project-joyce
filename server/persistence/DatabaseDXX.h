@@ -14,5 +14,5 @@ public:
 private:
     sqlite3* db_=nullptr;
     int lock_=-1;
-    void backupBeforeMigration(const std::string& path);
+    void backupBeforeMigration(const std::string& path,int version);
 };

@@ -81,21 +81,31 @@ file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/schema.sql" MVP1_SCHEMA)
 configure_file(database/SchemaDXX.h.in generated/SchemaDXX.h @ONLY)
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/migrations/002_friends.sql" MVP2_MIGRATION)
 configure_file(database/MigrationDXX.h.in generated/MigrationDXX.h @ONLY)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/database/migrations/003_groups.sql" MVP3_MIGRATION)
+configure_file(database/MigrationV3DXX.h.in generated/MigrationV3DXX.h @ONLY)
 add_library(IMProtocol STATIC protocol/JsonDXX.cpp protocol/ProtocolDXX.cpp)
 set_target_properties(IMProtocol PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_include_directories(IMProtocol PUBLIC protocol)
 target_link_libraries(IMProtocol PUBLIC json-c::json-c)
+add_library(IMGroupDomain STATIC
+    core/groups/GroupContextDXX.cpp core/groups/GroupPolicyDXX.cpp
+    core/groups/QQGroupPolicyDXX.cpp core/groups/WeChatGroupPolicyDXX.cpp
+    core/groups/GroupPolicyFactoryDXX.cpp core/groups/GroupMemberDXX.cpp
+    core/groups/SubgroupDXX.cpp core/groups/GroupDXX.cpp)
+set_target_properties(IMGroupDomain PROPERTIES AUTOMOC OFF AUTOUIC OFF)
+target_include_directories(IMGroupDomain PUBLIC core/groups)
 add_library(IMServerCore STATIC
     server/persistence/DatabaseDXX.cpp server/persistence/StatementDXX.cpp
     server/application/PasswordDXX.cpp server/application/AuthServiceDXX.cpp
     server/application/BusinessErrorDXX.cpp server/application/SocialRepositoryDXX.cpp
     server/application/AccountServiceDXX.cpp server/persistence/MutationRepositoryDXX.cpp
     server/application/FriendServiceDXX.cpp server/application/RecommendationServiceDXX.cpp
+    server/application/GroupServiceDXX.cpp server/persistence/GroupRepositoryDXX.cpp
     server/application/RequestDispatcherDXX.cpp server/network/TcpServerDXX.cpp)
 set_target_properties(IMServerCore PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_include_directories(IMServerCore PUBLIC server/persistence server/application server/network
     PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
-target_link_libraries(IMServerCore PUBLIC IMProtocol SQLite::SQLite3 OpenSSL::Crypto Threads::Threads)
+target_link_libraries(IMServerCore PUBLIC IMProtocol IMGroupDomain SQLite::SQLite3 OpenSSL::Crypto Threads::Threads)
 add_executable(IMServer server/main.cpp)
 set_target_properties(IMServer PROPERTIES AUTOMOC OFF AUTOUIC OFF)
 target_link_libraries(IMServer PRIVATE IMServerCore)
@@ -104,7 +114,8 @@ add_library(IMClientUi STATIC
     client/ui/RegisterWindowDXX.cpp client/ui/ServiceSelectWindowDXX.cpp
     client/ui/RequestPanelDXX.cpp client/ui/FriendPageDXX.cpp
     client/ui/FriendRequestPageDXX.cpp client/ui/RecommendationPageDXX.cpp
-    client/ui/AccountPageDXX.cpp client/ui/WorkspaceDXX.cpp)
+    client/ui/AccountPageDXX.cpp client/ui/WorkspaceDXX.cpp
+    client/ui/GroupPageDXX.cpp client/ui/GroupPolicyDialogDXX.cpp client/ui/SubgroupPageDXX.cpp)
 target_include_directories(IMClientUi PUBLIC client/network client/ui)
 target_link_libraries(IMClientUi PUBLIC IMProtocol Qt6::Widgets Qt6::Network)
 qt_add_executable(IMClient client/main.cpp)
@@ -140,4 +151,21 @@ if(BUILD_TESTING)
     target_link_libraries(Mvp2UiTestsDXX PRIVATE IMClientUi Qt6::Test)
     add_test(NAME mvp2_ui COMMAND Mvp2UiTestsDXX $<TARGET_FILE:IMServer>)
     set_tests_properties(mvp2_ui PROPERTIES TIMEOUT 180 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+endif()
+
+if(BUILD_TESTING)
+    add_executable(GroupPolicyTestsDXX tests/group_policy_main.cpp)
+    target_include_directories(GroupPolicyTestsDXX PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+    target_link_libraries(GroupPolicyTestsDXX PRIVATE IMGroupDomain)
+    add_test(NAME group_policy COMMAND GroupPolicyTestsDXX)
+    add_test(NAME group_database COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/group_database.py")
+    add_test(NAME mvp3_acceptance COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/mvp3_acceptance.py" --server $<TARGET_FILE:IMServer>)
+    set_tests_properties(mvp3_acceptance PROPERTIES TIMEOUT 360)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(Mvp3UiTestsDXX tests/mvp3_ui_main.cpp)
+    target_link_libraries(Mvp3UiTestsDXX PRIVATE IMClientUi Qt6::Test)
+    add_test(NAME mvp3_ui COMMAND Mvp3UiTestsDXX $<TARGET_FILE:IMServer>)
+    set_tests_properties(mvp3_ui PROPERTIES TIMEOUT 180 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

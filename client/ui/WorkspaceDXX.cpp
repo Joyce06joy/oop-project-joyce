@@ -1,5 +1,6 @@
 #include "WorkspaceDXX.h"
 #include "AccountPageDXX.h"
+#include "GroupPageDXX.h"
 #include "FriendPageDXX.h"
 #include "FriendRequestPageDXX.h"
 #include "RecommendationPageDXX.h"
@@ -24,6 +25,7 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
     if (active()) {
       friends_->refresh();
       requests_->refresh();
+      if (service_ != "WEIBO") groups_->setService(service_);
       if (tabs_->currentWidget() == recommendations_)
         recommendations_->refresh();
     }
@@ -56,6 +58,8 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   tabs_->addTab(requests_, QStringLiteral("申请"));
   tabs_->addTab(recommendations_, QStringLiteral("推荐"));
   tabs_->addTab(accounts_, QStringLiteral("账号"));
+  groups_ = new GroupPageDXX(c);
+  tabs_->addTab(groups_, QStringLiteral("群组"));
   connect(tabs_, &QTabWidget::currentChanged, this,
           [this] { refreshCurrent(); });
   connect(recommendations_, &RecommendationPageDXX::settingsRequested, this,
@@ -69,7 +73,8 @@ WorkspaceDXX::WorkspaceDXX(TcpClientDXX &c) : RequestPanelDXX(c) {
   for (auto *p : {static_cast<RequestPanelDXX *>(friends_),
                   static_cast<RequestPanelDXX *>(requests_),
                   static_cast<RequestPanelDXX *>(recommendations_),
-                  static_cast<RequestPanelDXX *>(accounts_)}) {
+                  static_cast<RequestPanelDXX *>(accounts_),
+                  static_cast<RequestPanelDXX *>(groups_)}) {
     connect(p, &RequestPanelDXX::authenticationRequired, this,
             &RequestPanelDXX::authenticationRequired);
     connect(p, &RequestPanelDXX::changed, this, [this] { scheduleRefresh(); });
@@ -105,6 +110,7 @@ void WorkspaceDXX::showAccount(const JsonDXX &a) {
                     static_cast<RequestPanelDXX *>(recommendations_),
                     static_cast<RequestPanelDXX *>(accounts_)})
       p->resetForUser(user);
+    groups_->resetGroupUser(user);
     recommendations_->setService(service_);
     for (auto *field : findChildren<QLineEdit *>())
       field->clear();
@@ -119,13 +125,14 @@ void WorkspaceDXX::showAccount(const JsonDXX &a) {
 void WorkspaceDXX::selectService(const QString &s) {
   if (s != service_ &&
       (friends_->mutationPending() || requests_->mutationPending() ||
-       recommendations_->mutationPending())) {
+       recommendations_->mutationPending() || groups_->pending())) {
     status->setText(QStringLiteral("请先确认或重试当前操作，再切换服务。"));
     return;
   }
   if (service_ != s) {
     service_ = s;
     recommendations_->setService(s);
+    if (active() && s != "WEIBO") groups_->setService(s);
     if (active()) {
       friends_->setService(s);
       requests_->setService(s);
@@ -135,6 +142,8 @@ void WorkspaceDXX::selectService(const QString &s) {
 }
 void WorkspaceDXX::refreshCurrent() {
   bool enabled = active();
+  tabs_->setTabVisible(4, service_ != "WEIBO");
+  groups_->setEnabled(enabled && service_ != "WEIBO");
   friends_->setEnabled(enabled);
   requests_->setEnabled(enabled);
   recommendations_->setEnabled(enabled);
@@ -152,6 +161,8 @@ void WorkspaceDXX::refreshCurrent() {
       friends_->setService(service_);
     else if (tabs_->currentWidget() == requests_)
       requests_->setService(service_);
+    else if (tabs_->currentWidget() == groups_)
+      groups_->setService(service_);
     else
       recommendations_->refresh();
   }

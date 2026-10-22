@@ -1,0 +1,4 @@
+M3-T10 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+1 passed; 0 failed; 20 not selected

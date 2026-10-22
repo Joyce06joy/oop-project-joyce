@@ -1,0 +1,30 @@
+Repeat 1
+M3-T17 PASS
+M3-T20 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+2 passed; 0 failed; 19 not selected
+Repeat 2
+M3-T17 PASS
+M3-T20 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+2 passed; 0 failed; 19 not selected
+Repeat 3
+M3-T17 PASS
+M3-T20 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+2 passed; 0 failed; 19 not selected
+Repeat 4
+M3-T17 PASS
+M3-T20 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+2 passed; 0 failed; 19 not selected
+Repeat 5
+M3-T17 PASS
+M3-T20 PASS
+M3-T18 scope: server SQL rollback and authoritative query only; GUI failure handling requires separate UI evidence.
+M3-T22 NOT RUN here: Qt Creator/CMake and three-client native UI are a separate acceptance scope.
+2 passed; 0 failed; 19 not selected

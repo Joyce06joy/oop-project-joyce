@@ -1,0 +1,12 @@
+[1/4] Automatic MOC and UIC for target Mvp3UiTestsDXX
+[2/3] Building CXX object CMakeFiles/Mvp3UiTestsDXX.dir/tests/mvp3_ui_main.cpp.o
+[3/3] Linking CXX executable Mvp3UiTestsDXX
+[1/3] Building CXX object CMakeFiles/IMServerCore.dir/server/application/GroupServiceDXX.cpp.o
+[2/3] Linking CXX static library libIMServerCore.a
+[3/3] Linking CXX executable IMServer
+[1/4] Automatic MOC and UIC for target Mvp3UiTestsDXX
+[2/3] Building CXX object CMakeFiles/Mvp3UiTestsDXX.dir/tests/mvp3_ui_main.cpp.o
+[3/3] Linking CXX executable Mvp3UiTestsDXX
+[1/4] Automatic MOC and UIC for target Mvp3UiTestsDXX
+[2/3] Building CXX object CMakeFiles/Mvp3UiTestsDXX.dir/tests/mvp3_ui_main.cpp.o
+[3/3] Linking CXX executable Mvp3UiTestsDXX

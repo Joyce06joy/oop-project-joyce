@@ -4,6 +4,7 @@
 #include "FriendServiceDXX.h"
 #include "RecommendationServiceDXX.h"
 #include "MutationRepositoryDXX.h"
+#include "GroupServiceDXX.h"
 #include <map>
 class RequestDispatcherDXX {
 public:
@@ -17,6 +18,7 @@ private:
     FriendServiceDXX friends_;
     RecommendationServiceDXX recommendations_;
     MutationRepositoryDXX mutations_;
+    GroupServiceDXX groups_;
     std::vector<std::pair<std::uint64_t,JsonDXX>> events_;
     void publish(const JsonDXX& notifications);
     std::map<std::uint64_t,JsonDXX> sessions_;
